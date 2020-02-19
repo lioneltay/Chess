@@ -1,0 +1,1 @@
+export { noopTemplate } from "./noopTemplate"
