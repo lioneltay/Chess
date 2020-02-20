@@ -1,22 +1,22 @@
 import React from "react"
 import { noopTemplate as css } from "lib/utils"
 
-import { Tile } from "components"
+import { Tile, Piece } from "components"
 
-import { Piece } from "types/chess"
+import { PieceType, ChessColor } from "types/chess"
 
-const board: (Piece | null)[][] = [
-  ["rook", "knight", "bishop", "queen", "king", "bishop", "knight", "rook"],
-  ["pawn", "pawn", "pawn", "pawn", "pawn", "pawn", "pawn", "pawn"],
-  [null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null],
-  ["pawn", "pawn", "pawn", "pawn", "pawn", "pawn", "pawn", "pawn"],
-  ["rook", "knight", "bishop", "queen", "king", "bishop", "knight", "rook"],
-]
+import { positionFromCoordinate } from "lib/chess"
 
-export default () => {
+type PieceInfo = {
+  type: PieceType
+  color: ChessColor
+}
+
+type Props = {
+  board: (PieceInfo | null)[][]
+}
+
+export default ({ board }: Props) => {
   return (
     <div
       css={css`
@@ -43,11 +43,11 @@ export default () => {
       `}
     >
       {board.map((row, rowIndex) =>
-        row.map((piece, colIndex) => (
+        row.map((info, colIndex) => (
           <Tile
             key={`${rowIndex}-${colIndex}`}
-            piece={piece}
-            position={[colIndex + 1, 8 - rowIndex]}
+            position={positionFromCoordinate([colIndex + 1, 8 - rowIndex])}
+            pieceInfo={info}
           />
         )),
       )}

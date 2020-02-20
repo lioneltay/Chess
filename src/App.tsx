@@ -1,12 +1,10 @@
 import React from "react"
-import { ChessBoard } from "components"
-import Demo from "lib/dnd/Demo"
+import { ChessGame } from "components"
 
 export default () => {
   return (
     <div>
-      {/* <ChessBoard /> */}
-      <Demo />
+      <ChessGame />
     </div>
   )
 }
