@@ -1,11 +1,11 @@
 # Tasks
 
-- Implement AI opponent (Stockfish) (https://github.com/nmrugg/stockfish.js)
+- [x] Add sprites
 
-- fix performance issues
+- [ ] fix performance issues
 
-- Add sprites
+- [ ] Implement AI opponent (Stockfish) (https://github.com/nmrugg/stockfish.js)
 
-- Add promotion
+- [ ] Add promotion
 
-* Test the drag and drop functionality
+- [ ] Test the drag and drop functionality

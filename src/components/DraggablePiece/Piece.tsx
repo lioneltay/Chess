@@ -1,13 +1,16 @@
 import React from "react"
 import { noopTemplate as css } from "lib/utils"
 
-import { ChessColor } from "types/chess"
+import { ChessColor, PieceType } from "types/chess"
+
+import { pieceName } from "consts"
 
 type Props = {
   color: ChessColor
+  piece: PieceType
 }
 
-export default ({ color }: Props) => {
+export default ({ color, piece }: Props) => {
   const colorString = color === "w" ? "white" : "black"
 
   return (
@@ -20,7 +23,9 @@ export default ({ color }: Props) => {
       `}
     >
       <img
-        src={`/public/chess-piece-images/pawn-${colorString}.png`}
+        src={`/public/chess-piece-images/${pieceName(
+          piece,
+        )}-${colorString}.png`}
         css={css`
           width: 100%;
           height: 100%;

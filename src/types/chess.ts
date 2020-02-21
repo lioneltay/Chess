@@ -1,5 +1,7 @@
 export type PieceType = "r" | "n" | "b" | "k" | "q" | "p"
 
+export type PieceName = "rook" | "knight" | "bishop" | "king" | "queen" | "pawn"
+
 export type ChessColor = "w" | "b"
 
 export type Vector2D = [number, number]

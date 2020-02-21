@@ -1,19 +1,10 @@
 import React from "react"
 
-import { Bishop, King, Knight, Pawn, Queen, Rook } from "./pieces"
-
 import { PieceType, ChessColor } from "types/chess"
 
 import { useDrag } from "react-dnd"
 
-const PIECES = {
-  b: Bishop,
-  k: King,
-  n: Knight,
-  q: Queen,
-  r: Rook,
-  p: Pawn,
-}
+import Piece from "./Piece"
 
 type Props = {
   piece: PieceType
@@ -33,8 +24,6 @@ export default ({ piece, color, position }: Props) => {
     }),
   })
 
-  const Piece = PIECES[piece]
-
   return (
     <div
       ref={drag}
@@ -42,7 +31,7 @@ export default ({ piece, color, position }: Props) => {
         opacity: isDragging ? 0.5 : 1,
       }}
     >
-      {Piece ? <Piece color={color} /> : null}
+      {Piece ? <Piece color={color} piece={piece} /> : null}
     </div>
   )
 }

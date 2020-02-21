@@ -8,13 +8,24 @@ type Props = {
 }
 
 export default ({ color }: Props) => {
+  const colorString = color === "w" ? "white" : "black"
+
   return (
     <div
       css={css`
-        color: ${color === 'w' ? 'white' : 'black'};
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: ${colorString};
       `}
     >
-      <h1>K</h1>
+      <img
+        src={`/public/chess-piece-images/king-${colorString}.png`}
+        css={css`
+          width: 100%;
+          height: 100%;
+        `}
+      />
     </div>
   )
 }

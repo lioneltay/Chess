@@ -1,7 +1,7 @@
 import React from "react"
 import { noopTemplate as css } from "lib/utils"
 
-import { Tile, Piece } from "components"
+import { Tile, DraggablePiece } from "components"
 
 import { PieceType, ChessColor } from "types/chess"
 

@@ -4,7 +4,7 @@ import Backend from "react-dnd-html5-backend"
 
 import { ChessBoard } from "components"
 
-import { Chess } from "lib/chess"
+import { Chess, getBestMove } from "lib/chess"
 
 import { PieceType, ChessColor, Square } from "types/chess"
 
@@ -21,6 +21,7 @@ type ChessContext = {
   // Returns if the side to move is in check
   inCheck(): boolean
   board: Tile[][]
+  turn: ChessColor
 }
 
 const ChessContext = createContext<ChessContext>((null as any) as ChessContext)
@@ -36,9 +37,54 @@ const ChessProvider: React.SFC = ({ children }) => {
   const forceUpdate = useForceUpdate()
   const { current: chess } = useRef(Chess())
 
+  const game = chess
+
+  // const doMove = (from, to) => {
+  //   chess.move({ from, to })
+  //   forceUpdate()
+  // }
+
+  // const playMove = () => {
+  //   return getBestMove(game.fen()).then(move => {
+  //     console.log(move)
+  //     console.log("MOVE", doMove(move?.from, move.to))
+  //   })
+  // }
+
+  // const main = async () => {
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   await playMove()
+  //   console.log(game.ascii())
+  // }
+
+  // main()
+
   return (
     <ChessContext.Provider
       value={{
+        turn: chess.turn(),
         board: chess.board(),
         moves: position => {
           const moves = chess
