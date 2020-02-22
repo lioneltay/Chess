@@ -1,0 +1,9 @@
+dispatch:
+  - url: "onyami.com/*"
+    service: prod-client
+
+  - url: "www.onyami.com/*"
+    service: prod-client
+
+  - url: "dev.onyami.com/*"
+    service: dev-client
