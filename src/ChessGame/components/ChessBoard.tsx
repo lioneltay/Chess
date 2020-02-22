@@ -1,11 +1,11 @@
 import React from "react"
 import { noopTemplate as css } from "lib/utils"
 
-import { Tile, DraggablePiece } from "components"
+import { Tile } from "ChessGame/components"
 
-import { PieceType, ChessColor } from "types/chess"
+import { PieceType, ChessColor } from "types"
 
-import { positionFromCoordinate } from "lib/chess"
+import { squareFromCoordinate } from "lib/chess"
 
 type PieceInfo = {
   type: PieceType
@@ -23,6 +23,9 @@ export default ({ board }: Props) => {
         margin-left: auto;
         margin-right: auto;
         max-width: 1000px;
+
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+          0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 
         display: grid;
         grid-template-columns: repeat(8, 1fr);
@@ -46,7 +49,7 @@ export default ({ board }: Props) => {
         row.map((info, colIndex) => (
           <Tile
             key={`${rowIndex}-${colIndex}`}
-            position={positionFromCoordinate([colIndex + 1, 8 - rowIndex])}
+            square={squareFromCoordinate([colIndex + 1, 8 - rowIndex])}
             pieceInfo={info}
           />
         )),

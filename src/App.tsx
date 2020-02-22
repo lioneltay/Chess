@@ -1,5 +1,5 @@
 import React from "react"
-import { ChessGame } from "components"
+import ChessGame from "ChessGame"
 
 export default () => {
   return (

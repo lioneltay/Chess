@@ -34,13 +34,13 @@
  * https://github.com/jhlywa/chess.js/blob/master/LICENSE
  */
 
-import { ChessInstance } from "@types/chess.js"
+import { ChessInstance as ChessInstanceOriginal } from "@types/chess.js"
 
-type ChessThing = ChessInstance & {
+export type ChessInstance = ChessInstanceOriginal & {
   board: () => any
 }
 
-export const Chess = function(fen?: string): ChessThing {
+export const Chess = function(fen?: string): ChessInstance {
   var BLACK = "b"
   var WHITE = "w"
 

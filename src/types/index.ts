@@ -1,3 +1,8 @@
+export type DragData = {
+  piece: PieceType
+  color: ChessColor
+  square: Square
+}
 export type PieceType = "r" | "n" | "b" | "k" | "q" | "p"
 
 export type PieceName = "rook" | "knight" | "bishop" | "king" | "queen" | "pawn"
