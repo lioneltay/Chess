@@ -19,6 +19,7 @@ export type State = {
     square: Square
     accessibleSquares: Square[]
   }
+  inCheck: boolean
 }
 
 const game = Chess()
@@ -29,12 +30,14 @@ const initialState: State = {
   turn: game.turn(),
   selectedPiece: null,
   previousMove: null,
+  inCheck: false,
 }
 
 const extractGameState = (game: ChessInstance) => {
   return {
     board: game.board(),
     turn: game.turn(),
+    inCheck: game.in_check(),
   }
 }
 
@@ -59,24 +62,27 @@ export const reducer = (state: State = initialState, action: Action): State => {
 
       const pieceOfCorrectColor = pieceInfo?.color === turn
 
+      if (!pieceOfCorrectColor) {
+        return state
+      }
+
       return {
         ...state,
-        ...extractGameState(game),
-        selectedPiece: pieceOfCorrectColor
-          ? {
-              square: action.square,
-              accessibleSquares: game
-                .moves({ square: action.square, verbose: true })
-                .map(item => item.to),
-            }
-          : null,
+        selectedPiece: {
+          square: action.square,
+          accessibleSquares: game
+            .moves({ square: action.square, verbose: true })
+            .map(item => item.to),
+        },
       }
     }
     case "DESELECT_PIECE": {
-      const game = state._game
+      if (!state.selectedPiece) {
+        return state
+      }
+
       return {
         ...state,
-        ...extractGameState(game),
         selectedPiece: null,
       }
     }

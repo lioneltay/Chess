@@ -6,19 +6,28 @@
 
   - [x] Context selector solution (this seems to be the sole issue)
 
-* [ ] Add touch/tap/click control along with drag
+* [x] Add touch/tap/click control along with drag
 
-- [ ] check highlight
+- [x] check highlight
 
-- [ ] move sound
+- [x] move sound
 
-- [ ] take sound
+- [x] take sound
+
+- [ ] Deploy to chess.lioneltay.com
+
+- [ ] custom drag preview
 
 - [ ] undo functionality
 
 - [ ] rewind/replay functionality
 
+
+
 - [ ] Implement AI opponent (Stockfish) (https://github.com/nmrugg/stockfish.js)
+
+- [ ] Start new game button
+  - [ ] Toggle Choose computer or no computer
 
 * [ ] show best moves functionality
 
@@ -28,3 +37,4 @@
 
 - [ ] Drawing Arrows and circles
   - [ ] red and green
+

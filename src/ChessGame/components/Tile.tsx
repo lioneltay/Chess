@@ -31,14 +31,20 @@ type ChessBoardCellProps = {
 }
 
 export default ({ square, pieceInfo }: ChessBoardCellProps) => {
-  const { move } = useActions()
-  const { accessibleSquares, selectedSquare, previousMove } = useSelector(
-    state => ({
-      accessibleSquares: state.selectedPiece?.accessibleSquares ?? [],
-      selectedSquare: state.selectedPiece?.square,
-      previousMove: state.previousMove,
-    }),
-  )
+  const { move, deselectPiece } = useActions()
+  const {
+    accessibleSquares,
+    selectedSquare,
+    previousMove,
+    inCheck,
+    turn,
+  } = useSelector(state => ({
+    accessibleSquares: state.selectedPiece?.accessibleSquares ?? [],
+    selectedSquare: state.selectedPiece?.square,
+    previousMove: state.previousMove,
+    inCheck: state.inCheck,
+    turn: state.turn,
+  }))
 
   const [{ isOver }, drop] = useDrop({
     accept: PIECE_TYPES,
@@ -73,21 +79,30 @@ export default ({ square, pieceInfo }: ChessBoardCellProps) => {
         align-items: center;
       `}
       onClick={() => {
+        if (!pieceInfo) {
+          deselectPiece()
+        }
+
         if (selectedSquare && accessibleSquares.includes(square)) {
           move({ from: selectedSquare, to: square })
         }
       }}
     >
-      {selectedSquare === square && <SelectedSquareHighlight />}
-
-      {canDrop && <ValidMoveDot />}
-
-      <CoordinateLabels square={square} />
-
-      {previousMove &&
-      (previousMove.from === square || previousMove.to === square) ? (
+      {canDrop ? (
+        pieceInfo ? (
+          <AttackedPieceHighlight square={square} />
+        ) : (
+          <ValidMoveDot />
+        )
+      ) : inCheck && turn === pieceInfo?.color && pieceInfo?.type === "k" ? (
+        <InCheckHighlight square={square} />
+      ) : selectedSquare === square ? (
+        <SelectedSquareHighlight />
+      ) : previousMove?.from === square || previousMove?.to === square ? (
         <PreviousMoveHighlight />
       ) : null}
+
+      <CoordinateLabels square={square} />
 
       {pieceInfo ? (
         <div
@@ -108,6 +123,10 @@ export default ({ square, pieceInfo }: ChessBoardCellProps) => {
   )
 }
 
+type SquareProps = {
+  square: Square
+}
+
 const Overlay = styled.div`
   position: absolute;
   width: 100%;
@@ -123,6 +142,36 @@ const SelectedSquareHighlight = styled(Overlay)`
   background: ${VALID_MOVE_HIGHLIGHT};
 `
 
+const InCheckHighlight = ({ square }: SquareProps) => {
+  const background = tileColor(square)
+
+  return (
+    <Overlay
+      css={css`
+        background: radial-gradient(
+          circle at center,
+          tomato 40%,
+          ${background}
+        );
+      `}
+    ></Overlay>
+  )
+}
+
+const AttackedPieceHighlight = ({ square }: SquareProps) => {
+  return (
+    <Fragment>
+      <SelectedSquareHighlight />
+      <Overlay
+        css={css`
+          border-radius: 50%;
+          background-color: ${tileColor(square)};
+        `}
+      />
+    </Fragment>
+  )
+}
+
 const ValidMoveDot = styled(Overlay)`
   background: ${VALID_MOVE_HIGHLIGHT};
   border-radius: 50%;
@@ -130,11 +179,7 @@ const ValidMoveDot = styled(Overlay)`
   height: 25%;
 `
 
-type CoordinateLabelsProps = {
-  square: Square
-}
-
-const CoordinateLabels = ({ square }: CoordinateLabelsProps) => {
+const CoordinateLabels = ({ square }: SquareProps) => {
   const [x, y] = coordinateFromSquare(square)
 
   const color = tileColor(square)

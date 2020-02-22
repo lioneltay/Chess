@@ -48,13 +48,6 @@ export default ({ piece, color, square }: Props) => {
 
   return (
     <Fragment>
-      {/* <DragPreviewImage
-        connect={preview}
-        src={`/public/chess-piece-images/${pieceName(
-          piece,
-        )}-${colorString}.png`}
-      /> */}
-
       <div
         ref={drag}
         style={{

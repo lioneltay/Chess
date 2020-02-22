@@ -2,7 +2,7 @@ import { bindActionCreators } from "redux"
 import { useDispatch } from "react-redux"
 import { Square } from "types"
 
-const MOVE = "MOVE"
+export const MOVE = "MOVE"
 type MoveInput = { from: Square; to: Square }
 export const move = ({ from, to }: MoveInput) => {
   return {
