@@ -30,6 +30,7 @@ export default ({ piece, color, square }: Props) => {
       color,
       square,
     },
+    canDrag: () => turn === color,
     begin: () => {
       selectPiece({ square })
     },
@@ -72,6 +73,7 @@ export default ({ piece, color, square }: Props) => {
               css={css`
                 width: 100%;
                 height: 100%;
+                pointer-events: none;
               `}
             />
           </div>
