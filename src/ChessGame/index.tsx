@@ -20,7 +20,7 @@ export default () => {
   return (
     <ReduxProvider store={store}>
       <DndProvider backend={Backend}>
-        <h1>Build Successful!</h1>
+        <h1>Build Successful!!</h1>
         <ChessGame />
       </DndProvider>
     </ReduxProvider>
