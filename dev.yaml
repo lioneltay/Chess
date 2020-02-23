@@ -1,5 +1,5 @@
-service: dev-client
-runtime: nodejs8
+service: dev-chess-client
+runtime: nodejs12
 
 instance_class: F1
 

@@ -1,0 +1,6 @@
+dispatch:
+  - url: "chess.lioneltay.com/*"
+    service: prod-chess-client
+
+  - url: "dev.chess.lioneltay.com/*"
+    service: dev-chess-client

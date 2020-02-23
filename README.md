@@ -14,17 +14,20 @@
 
 - [x] take sound
 
-- [ ] Deploy to chess.lioneltay.com
+- [x] Deploy to chess.lioneltay.com
+
+- [ ] Automate deployment with TravisCI
 
 - [ ] custom drag preview
+  - https://react-dnd.github.io/react-dnd/examples/drag-around/custom-drag-layer
 
 - [ ] undo functionality
 
 - [ ] rewind/replay functionality
 
-
-
 - [ ] Implement AI opponent (Stockfish) (https://github.com/nmrugg/stockfish.js)
+
+## Goalpost
 
 - [ ] Start new game button
   - [ ] Toggle Choose computer or no computer
@@ -35,6 +38,9 @@
 
 * [ ] Test the drag and drop functionality
 
-- [ ] Drawing Arrows and circles
+* [ ] Drawing Arrows
+
   - [ ] red and green
 
+* [ ] Drawing Circles
+  - [ ] red and green
