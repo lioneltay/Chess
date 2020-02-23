@@ -1,13 +1,11 @@
-import React, { useRef, useReducer } from "react"
+import React from "react"
 import { DndProvider } from "react-dnd"
-import Backend from "react-dnd-html5-backend"
+import MultiBackend from "react-dnd-multi-backend"
+import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch"
 
 import { ChessBoard } from "ChessGame/components"
 
-import { Chess } from "lib/chess"
-
-import { ChessContext } from "./context"
-import { reducer, store, useSelector } from "./store"
+import { store, useSelector } from "./store"
 
 import { Provider as ReduxProvider } from "react-redux"
 
@@ -19,7 +17,7 @@ const ChessGame = () => {
 export default () => {
   return (
     <ReduxProvider store={store}>
-      <DndProvider backend={Backend}>
+      <DndProvider backend={MultiBackend} options={HTML5toTouch}>
         <ChessGame />
       </DndProvider>
     </ReduxProvider>

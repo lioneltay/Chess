@@ -18,6 +18,8 @@
 
 - [x] Automate deployment with TravisCI
 
+- [x] mobile drag support
+
 - [ ] custom drag preview
   - https://react-dnd.github.io/react-dnd/examples/drag-around/custom-drag-layer
 
