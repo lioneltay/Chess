@@ -3,9 +3,7 @@ language: node_js
 node_js:
   - "10"
 before_install:
-  - openssl aes-256-cbc -K $encrypted_8517169ff567_key -iv $encrypted_8517169ff567_iv
-    -in ./keys/travis-deploy-lioneltay-service-account.json.enc -out ./keys/travis-deploy-lioneltay-service-account.json
-    -d
+  - openssl aes-256-cbc -K $encrypted_f354aaeffba3_key -iv $encrypted_f354aaeffba3_iv -in ./keys/travis-gae-deployer.json.enc -out ./keys/travis-gae-deployer.json -d
 
 install:
   - npm install
@@ -19,28 +17,28 @@ before_deploy:
 deploy:
   - provider: gae
     project: lioneltay
-    keyfile: "./keys/travis-deploy-lioneltay-service-account.json"
+    keyfile: "./keys/travis-gae-deployer.json"
     config: dispatch.yaml
     verbosity: debug
     skip_cleanup: true
     on: master
   - provider: gae
     project: lioneltay
-    keyfile: "./keys/travis-deploy-lioneltay-service-account.json"
+    keyfile: "./keys/travis-gae-deployer.json"
     config: "./prod.yaml"
     verbosity: debug
     skip_cleanup: true
     on: master
   - provider: gae
     project: lioneltay
-    keyfile: "./keys/travis-deploy-lioneltay-service-account.json"
+    keyfile: "./keys/travis-gae-deployer.json"
     config: dispatch.yaml
     verbosity: debug
     skip_cleanup: true
     on: dev
   - provider: gae
     project: lioneltay
-    keyfile: "./keys/travis-deploy-lioneltay-service-account.json"
+    keyfile: "./keys/travis-gae-deployer.json"
     config: "./dev.yaml"
     verbosity: debug
     skip_cleanup: true

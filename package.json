@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./dist/server.js",
+    "test": "echo no tests yet",
     "typecheck": "tsc --noEmit --watch --skipLibCheck",
     "dev": "webpack-dev-server --config ./webpack/webpack.config.dev.js",
     "clean": "rimraf dist",
