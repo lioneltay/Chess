@@ -35,9 +35,7 @@ export function getBestMove(
   return new Promise(res => {
     stockfish.onmessage = function(event) {
       if (event.data && event.data.startsWith("bestmove")) {
-        console.log(event.data)
         const match = event.data.match(/[^\ ]* ([^\ ]{2,2})([^\ ]{2,2}).*$/)
-        console.log(match)
         if (match[1] && match[2]) {
           res({ from: match[1], to: match[2] })
         } else {

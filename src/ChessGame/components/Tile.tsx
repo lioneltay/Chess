@@ -6,7 +6,7 @@ import { useDrop } from "react-dnd"
 
 import { PieceType, ChessColor, Square, DragData } from "types"
 
-import { Piece } from "ChessGame/components"
+import { DraggablePiece } from "ChessGame/components"
 
 import { coordinateFromSquare, numberToLetter } from "lib/chess"
 
@@ -48,10 +48,12 @@ export default ({ square, pieceInfo }: ChessBoardCellProps) => {
 
   const [{ isOver }, drop] = useDrop({
     accept: PIECE_TYPES,
-    canDrop: () => {
-      return accessibleSquares.includes(square)
-    },
     drop: (_item, monitor) => {
+      // Allowing a drop to always happen ends the dragging sooner so the drag preview doesn't linger
+      if (!accessibleSquares.includes(square)) {
+        return
+      }
+
       const item = (_item as unknown) as DragData
       move({ from: item.square, to: square })
     },
@@ -112,7 +114,7 @@ export default ({ square, pieceInfo }: ChessBoardCellProps) => {
             height: 100%;
           `}
         >
-          <Piece
+          <DraggablePiece
             piece={pieceInfo.type}
             color={pieceInfo.color}
             square={square}
