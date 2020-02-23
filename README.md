@@ -20,7 +20,7 @@
 
 - [x] mobile drag support
 
-- [ ] custom drag preview
+- [x] custom drag preview
   - https://react-dnd.github.io/react-dnd/examples/drag-around/custom-drag-layer
 
 - [ ] undo functionality
