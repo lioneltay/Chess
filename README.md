@@ -36,11 +36,15 @@
 * [x] Drawing Circles
   - [x] red and green
 
-- [ ] use svg for text labels so they scale with viewport
+- [x] use svg for text labels so they scale with viewport
 
 - [ ] Drawing Arrows
 
   - [ ] red and green
+
+- [ ] flip board
+
+- [ ] play as black
 
 - [ ] show best moves functionality
 
