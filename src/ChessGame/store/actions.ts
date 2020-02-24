@@ -36,17 +36,53 @@ export const undo = () =>
   } as const)
 type UndoAction = ReturnType<typeof undo>
 
+const GO_BACK = "GO_BACK"
+export const goBack = () =>
+  ({
+    type: GO_BACK,
+  } as const)
+type GoBackAction = ReturnType<typeof goBack>
+
+const GO_FORWARD = "GO_FORWARD"
+export const goForward = () =>
+  ({
+    type: GO_FORWARD,
+  } as const)
+type GoForwardAction = ReturnType<typeof goForward>
+
+const GO_START = "GO_START"
+export const goStart = () =>
+  ({
+    type: GO_START,
+  } as const)
+type GoStartAction = ReturnType<typeof goStart>
+
+const GO_END = "GO_END"
+export const goEnd = () =>
+  ({
+    type: GO_END,
+  } as const)
+type GoEndAction = ReturnType<typeof goEnd>
+
 export type Action =
   | MoveAction
   | SelectPieceAction
   | DeselectPieceAction
   | UndoAction
+  | GoBackAction
+  | GoForwardAction
+  | GoStartAction
+  | GoEndAction
 
 const actionCreators = {
   move,
   selectPiece,
   deselectPiece,
   undo,
+  goBack,
+  goForward,
+  goStart,
+  goEnd,
 }
 
 export const useActions = () => {

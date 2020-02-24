@@ -25,11 +25,20 @@
 
 - [x] undo functionality
 
-- [ ] refactor
-  - [ ] remove use of game object from state, convert to pure functions which utilize Chess object internally
+- [x] refactor
+  - [x] remove use of game object from state, convert to pure functions which utilize Chess object internally
 
-- [ ] rewind/replay/start/end functionality
-  - [ ] Custom functions to navigate a pgn string
+- [x] rewind/replay/start/end functionality
+  - [ ] Keyboard shortcuts left right up down
+
+* [ ] show best moves functionality
+
+* [ ] Drawing Arrows
+
+  - [ ] red and green
+
+* [ ] Drawing Circles
+  - [ ] red and green
 
 - [ ] Implement AI opponent (Stockfish) (https://github.com/nmrugg/stockfish.js)
 
@@ -38,15 +47,6 @@
 - [ ] Start new game button
   - [ ] Toggle Choose computer or no computer
 
-* [ ] show best moves functionality
-
 * [ ] Add promotion
 
 * [ ] Test the drag and drop functionality
-
-* [ ] Drawing Arrows
-
-  - [ ] red and green
-
-* [ ] Drawing Circles
-  - [ ] red and green

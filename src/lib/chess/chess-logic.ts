@@ -22,12 +22,6 @@ export const pgnToFen = (pgn: PGN): FEN => {
   return game.fen()
 }
 
-export const undo = (fen: FEN): FEN => {
-  const game = Chess(fen)
-  game.undo()
-  return game.fen()
-}
-
 export const move = (fen: FEN, move: Move): FEN => {
   const game = Chess(fen)
   game.move(move)

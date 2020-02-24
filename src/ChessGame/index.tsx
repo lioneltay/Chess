@@ -11,12 +11,10 @@ import { store, useSelector } from "./store"
 
 import { Provider as ReduxProvider } from "react-redux"
 
-import { fenToPgn } from "lib/chess"
-
 const ChessGame = () => {
   const board = useSelector(state => state.board)
   const state = useSelector(state => {
-    const blarg = {...state}
+    const blarg = { ...state }
     delete blarg.board
     return blarg
   })
@@ -25,8 +23,7 @@ const ChessGame = () => {
     <div>
       <ChessBoard board={board} />
       <div>{state.fen}</div>
-      {/* <pre>{JSON.stringify(state, null, 2)}</pre> */}
-      <div>{fenToPgn(state.fen)}</div>
+      <pre>{JSON.stringify(state, null, 2)}</pre>
     </div>
   )
 }
@@ -35,8 +32,8 @@ export default () => {
   return (
     <ReduxProvider store={store}>
       <DndProvider backend={MultiBackend} options={HTML5toTouch}>
-        <ChessGame />
         <Controls />
+        <ChessGame />
         <CustomDragPreview />
       </DndProvider>
     </ReduxProvider>
