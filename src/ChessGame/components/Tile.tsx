@@ -219,36 +219,43 @@ const CoordinateLabels = ({ square }: SquareProps) => {
   const color = tileColor(square)
   const textColor = color === DARK ? LIGHT : DARK
 
+  const svgStyle = {
+    fontSize: "12",
+    fill: textColor,
+  }
+
   return (
     <Fragment>
       {x === 8 ? (
-        <div
-          css={css`
-            color: ${textColor};
-            position: absolute;
-            padding: 4px;
-            font-weight: 500;
-            top: 0;
-            right: 0;
-          `}
-        >
-          {y}
-        </div>
+        <Overlay>
+          <svg viewBox="0 0 100 100">
+            <text
+              {...svgStyle}
+              x="95"
+              y="5"
+              alignmentBaseline="hanging"
+              textAnchor="end"
+            >
+              {y}
+            </text>
+          </svg>
+        </Overlay>
       ) : null}
 
       {y === 1 ? (
-        <div
-          css={css`
-            color: ${textColor};
-            position: absolute;
-            padding: 4px;
-            font-weight: 500;
-            bottom: 0;
-            left: 0;
-          `}
-        >
-          {numberToLetter(x)}
-        </div>
+        <Overlay>
+          <svg viewBox="0 0 100 100">
+            <text
+              {...svgStyle}
+              x="5"
+              y="95"
+              alignmentBaseline="baseline"
+              textAnchor="start"
+            >
+              {numberToLetter(x)}
+            </text>
+          </svg>
+        </Overlay>
       ) : null}
     </Fragment>
   )

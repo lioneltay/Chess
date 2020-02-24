@@ -36,6 +36,8 @@
 * [x] Drawing Circles
   - [x] red and green
 
+- [ ] use svg for text labels so they scale with viewport
+
 - [ ] Drawing Arrows
 
   - [ ] red and green
