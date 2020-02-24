@@ -1,8 +1,20 @@
 import React, { useEffect } from "react"
-import { useActions } from "ChessGame/store"
+import { useActions, useSelector } from "ChessGame/store"
 
 export default () => {
-  const { undo, goBack, goEnd, goForward, goStart, flipBoard } = useActions()
+  const {
+    undo,
+    goBack,
+    goEnd,
+    goForward,
+    goStart,
+    flipBoard,
+    setShowBestMove,
+  } = useActions()
+
+  const { showBestMove } = useSelector(state => ({
+    showBestMove: state.showBestMove,
+  }))
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -32,6 +44,9 @@ export default () => {
   return (
     <div>
       <h1>Controls</h1>
+      <button onClick={() => setShowBestMove({ show: !showBestMove })}>
+        {showBestMove ? "Hide" : "Show"} Best Move
+      </button>
       <button onClick={flipBoard}>Flip Board</button>
       <button onClick={undo}>Undo</button>
       <button onClick={goStart}>Start</button>

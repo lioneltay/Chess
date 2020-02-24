@@ -15,14 +15,18 @@ import { Provider as ReduxProvider } from "react-redux"
 import { getBestMove } from "lib/chess"
 
 const ChessGame = () => {
-  const { move } = useActions()
-  const { board, flippedBoard, ai, turn, fen } = useSelector(state => ({
-    board: state.board,
-    flippedBoard: state.flippedBoard,
-    ai: state.ai,
-    turn: state.turn,
-    fen: state.fen,
-  }))
+  const { move, setBestMove } = useActions()
+  const { board, flippedBoard, ai, turn, fen, showBestMove } = useSelector(
+    state => ({
+      board: state.board,
+      flippedBoard: state.flippedBoard,
+      ai: state.ai,
+      turn: state.turn,
+      fen: state.fen,
+      showBestMove: state.showBestMove,
+    }),
+  )
+
   const state = useSelector(state => {
     const blarg = { ...state }
     delete blarg.board
@@ -31,17 +35,20 @@ const ChessGame = () => {
   })
 
   useEffect(() => {
-    console.log('EFFECT')
     if (ai?.color === turn) {
-      console.log("MAKING MOVE")
       getBestMove(fen).then(bestMove => {
-        console.log(`Best move is ${bestMove}`)
         if (bestMove) {
           move(bestMove)
         }
       })
     }
   }, [ai?.color === turn])
+
+  useEffect(() => {
+    if (showBestMove) {
+      getBestMove(fen, move => setBestMove({ move }))
+    }
+  }, [showBestMove, turn])
 
   return (
     <div>

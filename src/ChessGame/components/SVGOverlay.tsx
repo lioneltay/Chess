@@ -40,10 +40,18 @@ const getArrowCoordinates = (
 }
 
 export default () => {
-  const { arrows, drawingState, flippedBoard } = useSelector(state => ({
+  const {
+    arrows,
+    drawingState,
+    flippedBoard,
+    bestMove,
+    showBestMove,
+  } = useSelector(state => ({
     flippedBoard: state.flippedBoard,
     arrows: state.arrows,
     drawingState: state.drawingState,
+    bestMove: state.bestMove,
+    showBestMove: state.showBestMove,
   }))
 
   const drawingArrow =
@@ -116,6 +124,15 @@ export default () => {
           color={drawingArrow.color}
           flippedBoard={flippedBoard}
           short={short}
+        />
+      ) : null}
+
+      {showBestMove && bestMove ? (
+        <Arrow
+          to={bestMove.to}
+          from={bestMove.from}
+          color="grey"
+          flippedBoard={flippedBoard}
         />
       ) : null}
     </svg>

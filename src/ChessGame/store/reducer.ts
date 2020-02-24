@@ -17,6 +17,7 @@ import {
   CircleColor,
   ArrowColor,
   Arrow,
+  Move,
 } from "types"
 
 import { Action } from "./actions"
@@ -27,7 +28,8 @@ export type State = {
   ai: null | {
     color: ChessColor
   }
-  showBestMoves: boolean
+  showBestMove: boolean
+  bestMove: Move | null
   fen: FEN
   history: FEN[]
   historyCursor: number
@@ -54,8 +56,9 @@ const initialFen = NEW_GAME_FEN
 
 const initialState: State = {
   flippedBoard: false,
-  ai: { color: "b" },
-  showBestMoves: true,
+  ai: { color: "w" },
+  showBestMove: true,
+  bestMove: null,
   fen: initialFen,
   history: [initialFen],
   historyCursor: 0,
@@ -83,6 +86,7 @@ export const reducer = (state: State = initialState, action: Action): State => {
         historyCursor: state.historyCursor + 1,
         selectedPiece: null,
         previousMove: moveObj,
+        bestMove: null,
       }
     }
     case "SELECT_PIECE": {
@@ -247,6 +251,18 @@ export const reducer = (state: State = initialState, action: Action): State => {
       return {
         ...state,
         flippedBoard: !state.flippedBoard,
+      }
+    }
+    case "SET_BEST_MOVE": {
+      return {
+        ...state,
+        bestMove: action.move,
+      }
+    }
+    case "SET_SHOW_BEST_MOVE": {
+      return {
+        ...state,
+        showBestMove: action.show,
       }
     }
     default: {

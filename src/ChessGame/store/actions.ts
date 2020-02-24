@@ -1,6 +1,6 @@
 import { bindActionCreators } from "redux"
 import { useDispatch } from "react-redux"
-import { Square, CircleColor } from "types"
+import { Square, CircleColor, Move } from "types"
 
 export const MOVE = "MOVE"
 type MoveInput = { from: Square; to: Square }
@@ -99,6 +99,24 @@ export const flipBoard = () =>
   } as const)
 type FlipBoardAction = ReturnType<typeof flipBoard>
 
+const SET_BEST_MOVE = "SET_BEST_MOVE"
+type SetBestMoveInput = { move: Move }
+export const setBestMove = ({ move }: SetBestMoveInput) =>
+  ({
+    type: SET_BEST_MOVE,
+    move,
+  } as const)
+type SetBestMoveAction = ReturnType<typeof setBestMove>
+
+const SET_SHOW_BEST_MOVE = "SET_SHOW_BEST_MOVE"
+type SetShowBestMoveInput = { show: boolean }
+export const setShowBestMove = ({ show }: SetShowBestMoveInput) =>
+  ({
+    type: SET_SHOW_BEST_MOVE,
+    show,
+  } as const)
+type SetShowBestMoveAction = ReturnType<typeof setShowBestMove>
+
 export type Action =
   | MoveAction
   | SelectPieceAction
@@ -112,8 +130,12 @@ export type Action =
   | EndDrawAction
   | UpdateDrawAction
   | FlipBoardAction
+  | SetBestMoveAction
+  | SetShowBestMoveAction
 
 const actionCreators = {
+  setShowBestMove,
+  setBestMove,
   flipBoard,
   endDraw,
   updateDraw,

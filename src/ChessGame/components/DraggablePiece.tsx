@@ -21,10 +21,9 @@ type Props = {
 export default ({ piece, color, square }: Props) => {
   const dragRef = useRef<HTMLDivElement | null>(null)
   const { selectPiece, deselectPiece } = useActions()
-  const { selectedSquare, turn, ai } = useSelector(state => ({
+  const { selectedSquare, turn } = useSelector(state => ({
     selectedSquare: state.selectedPiece?.square,
     turn: state.turn,
-    ai: state.ai,
   }))
 
   const [{ isDragging }, drag, preview] = useDrag({
@@ -36,7 +35,7 @@ export default ({ piece, color, square }: Props) => {
         dimension: dragRef.current?.getBoundingClientRect().width,
       },
     },
-    canDrag: () => turn === color && ai?.color !== color,
+    canDrag: () => turn === color,
     begin: () => {
       selectPiece({ square })
     },

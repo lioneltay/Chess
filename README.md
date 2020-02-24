@@ -49,14 +49,20 @@
 * [x] Implement AI opponent (Stockfish) (https://github.com/nmrugg/stockfish.js)
 
 - [ ] show best moves functionality
+  - [ ] create an rxjs stream
+  - [ ] Thunk action that listens to a rxjs stream and updates store
+
+- [ ] show animated score bar
+
+* [ ] Start new game button
+  - [ ] Show options
+  - [ ] Toggle Choose ai
+  - [ ] choose side
 
 ## Goalpost
 
-- [ ] Start new game button
-  - [ ] Toggle Choose computer or no computer
+- [ ] Add promotion
 
-* [ ] Add promotion
+* [ ] improve performance
 
-- [ ] improve performance
-
-* [ ] Test the drag and drop functionality
+- [ ] Test the drag and drop functionality
