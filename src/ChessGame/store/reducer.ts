@@ -1,18 +1,20 @@
 import { assertNever } from "lib/utils"
-import { ChessInstance, Chess } from "lib/chess"
+import {
+  move,
+  fenToGameState,
+  getPiece,
+  undo,
+  getValidMoves,
+  NEW_GAME_FEN,
+} from "lib/chess"
 
-import { PieceType, ChessColor, Square } from "types"
+import { ChessColor, Square, Board, FEN } from "types"
 
 import { Action } from "./actions"
 
-type Tile = {
-  type: PieceType
-  color: ChessColor
-}
-
 export type State = {
-  _game: ChessInstance
-  board: Tile[][]
+  fen: FEN
+  board: Board
   turn: ChessColor
   previousMove: { from: Square; to: Square } | null
   selectedPiece: null | {
@@ -22,42 +24,29 @@ export type State = {
   inCheck: boolean
 }
 
-const game = Chess()
-
 const initialState: State = {
-  _game: game,
-  board: game.board(),
-  turn: game.turn(),
+  fen: NEW_GAME_FEN,
+  ...fenToGameState(NEW_GAME_FEN),
   selectedPiece: null,
   previousMove: null,
-  inCheck: false,
-}
-
-const extractGameState = (game: ChessInstance) => {
-  return {
-    board: game.board(),
-    turn: game.turn(),
-    inCheck: game.in_check(),
-  }
 }
 
 export const reducer = (state: State = initialState, action: Action): State => {
   switch (action.type) {
     case "MOVE": {
-      const game = state._game
-      const move = { from: action.from, to: action.to }
-      game.move(move)
+      const moveObj = { from: action.from, to: action.to }
+      const fen = move(state.fen, moveObj)
 
       return {
         ...state,
-        ...extractGameState(game),
+        ...fenToGameState(fen),
+        fen,
         selectedPiece: null,
-        previousMove: move,
+        previousMove: moveObj,
       }
     }
     case "SELECT_PIECE": {
-      const game = state._game
-      const pieceInfo = game.get(action.square)
+      const pieceInfo = getPiece(state.fen, action.square)
       const turn = state.turn
 
       const pieceOfCorrectColor = pieceInfo?.color === turn
@@ -70,9 +59,7 @@ export const reducer = (state: State = initialState, action: Action): State => {
         ...state,
         selectedPiece: {
           square: action.square,
-          accessibleSquares: game
-            .moves({ square: action.square, verbose: true })
-            .map(item => item.to),
+          accessibleSquares: getValidMoves(state.fen, action.square),
         },
       }
     }
@@ -84,6 +71,14 @@ export const reducer = (state: State = initialState, action: Action): State => {
       return {
         ...state,
         selectedPiece: null,
+      }
+    }
+    case "UNDO": {
+      const fen = undo(state.fen)
+      return {
+        ...state,
+        ...fenToGameState(fen),
+        fen,
       }
     }
     default: {

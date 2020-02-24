@@ -29,12 +29,24 @@ export const deselectPiece = () =>
   } as const)
 type DeselectPieceAction = ReturnType<typeof deselectPiece>
 
-export type Action = MoveAction | SelectPieceAction | DeselectPieceAction
+const UNDO = "UNDO"
+export const undo = () =>
+  ({
+    type: UNDO,
+  } as const)
+type UndoAction = ReturnType<typeof undo>
+
+export type Action =
+  | MoveAction
+  | SelectPieceAction
+  | DeselectPieceAction
+  | UndoAction
 
 const actionCreators = {
   move,
   selectPiece,
   deselectPiece,
+  undo,
 }
 
 export const useActions = () => {

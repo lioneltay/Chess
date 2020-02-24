@@ -23,9 +23,13 @@
 - [x] custom drag preview
   - https://react-dnd.github.io/react-dnd/examples/drag-around/custom-drag-layer
 
-- [ ] undo functionality
+- [x] undo functionality
 
-- [ ] rewind/replay functionality
+- [ ] refactor
+  - [ ] remove use of game object from state, convert to pure functions which utilize Chess object internally
+
+- [ ] rewind/replay/start/end functionality
+  - [ ] Custom functions to navigate a pgn string
 
 - [ ] Implement AI opponent (Stockfish) (https://github.com/nmrugg/stockfish.js)
 

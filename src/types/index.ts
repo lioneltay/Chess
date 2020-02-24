@@ -1,3 +1,11 @@
+export type FEN = string
+export type PGN = string
+
+export type PieceInfo = {
+  type: PieceType
+  color: ChessColor
+}
+
 export type DragData = {
   piece: PieceType
   color: ChessColor
@@ -6,6 +14,15 @@ export type DragData = {
 export type PieceType = "r" | "n" | "b" | "k" | "q" | "p"
 
 export type PieceName = "rook" | "knight" | "bishop" | "king" | "queen" | "pawn"
+
+export type Tile = {
+  type: PieceType
+  color: ChessColor
+}
+
+export type Move = { from: Square; to: Square }
+
+export type Board = Tile[][]
 
 export type ChessColor = "w" | "b"
 
