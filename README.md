@@ -57,4 +57,6 @@
 
 * [ ] Add promotion
 
+- [ ] improve performance
+
 * [ ] Test the drag and drop functionality

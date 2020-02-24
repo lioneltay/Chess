@@ -56,8 +56,8 @@ const ChessGame = () => {
         <ChessBoard board={board} flippedBoard={flippedBoard} />
         <SVGOverlay />
       </div>
-      <div>{state.fen}</div>
-      <pre>{JSON.stringify(state, null, 2)}</pre>
+      {/* <div>{state.fen}</div>
+      <pre>{JSON.stringify(state, null, 2)}</pre> */}
     </div>
   )
 }
