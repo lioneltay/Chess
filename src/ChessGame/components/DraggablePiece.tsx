@@ -26,7 +26,7 @@ export default ({ piece, color, square }: Props) => {
     turn: state.turn,
   }))
 
-  const [{ isDragging }, drag, preview] = useDrag({
+  const [{ isDragging, canDrag }, drag, preview] = useDrag({
     item: {
       type: piece,
       color,
@@ -41,6 +41,7 @@ export default ({ piece, color, square }: Props) => {
     },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
+      canDrag: monitor.canDrag(),
     }),
   })
 
@@ -63,6 +64,7 @@ export default ({ piece, color, square }: Props) => {
         }}
         style={{
           opacity: isDragging ? 0.5 : 1,
+          cursor: canDrag ? "grab" : "not-allowed",
         }}
       >
         {piece ? (

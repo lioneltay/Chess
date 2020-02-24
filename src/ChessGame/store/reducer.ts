@@ -56,7 +56,7 @@ const initialFen = NEW_GAME_FEN
 
 const initialState: State = {
   flippedBoard: false,
-  ai: { color: "w" },
+  ai: { color: "b" },
   showBestMove: true,
   bestMove: null,
   fen: initialFen,
