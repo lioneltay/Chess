@@ -114,11 +114,17 @@ export const reducer = (state: State = initialState, action: Action): State => {
       }
     }
     case "UNDO": {
-      if (state.historyCursor === 0) {
+      // Cannot undo at start of game or on the AI's turn
+      if (state.historyCursor === 0 || state.ai?.color === state.turn) {
         return state
       }
 
-      const newHistory = init(state.history)
+      const stepsBack = state.ai ? 2 : 1
+
+      const newHistory = state.history.slice(
+        0,
+        state.history.length - stepsBack,
+      )
       const newFen = last(newHistory)
 
       if (!newFen) {
@@ -130,7 +136,7 @@ export const reducer = (state: State = initialState, action: Action): State => {
         ...fenToGameState(newFen),
         fen: newFen,
         history: newHistory,
-        historyCursor: state.historyCursor - 1,
+        historyCursor: state.historyCursor - stepsBack,
       }
     }
     case "GO_BACK": {
