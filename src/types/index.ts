@@ -1,6 +1,10 @@
 export type FEN = string
 export type PGN = string
 
+export type CircleColor = "red" | "green"
+
+export type SquareMap<T> = Record<Square, T>
+
 export type PieceInfo = {
   type: PieceType
   color: ChessColor

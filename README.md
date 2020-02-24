@@ -21,26 +21,28 @@
 - [x] mobile drag support
 
 - [x] custom drag preview
+
   - https://react-dnd.github.io/react-dnd/examples/drag-around/custom-drag-layer
 
 - [x] undo functionality
 
 - [x] refactor
+
   - [x] remove use of game object from state, convert to pure functions which utilize Chess object internally
 
 - [x] rewind/replay/start/end functionality
   - [ ] Keyboard shortcuts left right up down
 
-* [ ] show best moves functionality
+* [x] Drawing Circles
+  - [x] red and green
 
-* [ ] Drawing Arrows
+- [ ] Drawing Arrows
 
   - [ ] red and green
 
-* [ ] Drawing Circles
-  - [ ] red and green
+- [ ] show best moves functionality
 
-- [ ] Implement AI opponent (Stockfish) (https://github.com/nmrugg/stockfish.js)
+* [ ] Implement AI opponent (Stockfish) (https://github.com/nmrugg/stockfish.js)
 
 ## Goalpost
 

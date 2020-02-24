@@ -1,6 +1,6 @@
 import { bindActionCreators } from "redux"
 import { useDispatch } from "react-redux"
-import { Square } from "types"
+import { Square, CircleColor } from "types"
 
 export const MOVE = "MOVE"
 type MoveInput = { from: Square; to: Square }
@@ -64,6 +64,16 @@ export const goEnd = () =>
   } as const)
 type GoEndAction = ReturnType<typeof goEnd>
 
+const DRAW_CIRCLE = "DRAW_CIRCLE"
+type DrawCircleInput = { square: Square; color: CircleColor }
+export const drawCircle = ({ square, color }: DrawCircleInput) =>
+  ({
+    type: DRAW_CIRCLE,
+    square,
+    color,
+  } as const)
+type DrawCircleAction = ReturnType<typeof drawCircle>
+
 export type Action =
   | MoveAction
   | SelectPieceAction
@@ -73,8 +83,10 @@ export type Action =
   | GoForwardAction
   | GoStartAction
   | GoEndAction
+  | DrawCircleAction
 
 const actionCreators = {
+  drawCircle,
   move,
   selectPiece,
   deselectPiece,

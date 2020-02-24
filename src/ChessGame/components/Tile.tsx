@@ -4,7 +4,7 @@ import { noopTemplate as css } from "lib/utils"
 
 import { useDrop } from "react-dnd"
 
-import { PieceType, ChessColor, Square, DragData } from "types"
+import { PieceType, ChessColor, Square, DragData, CircleColor } from "types"
 
 import { DraggablePiece } from "ChessGame/components"
 
@@ -31,19 +31,21 @@ type ChessBoardCellProps = {
 }
 
 export default ({ square, pieceInfo }: ChessBoardCellProps) => {
-  const { move, deselectPiece } = useActions()
+  const { move, deselectPiece, drawCircle } = useActions()
   const {
     accessibleSquares,
     selectedSquare,
     previousMove,
     inCheck,
     turn,
+    circleColor,
   } = useSelector(state => ({
     accessibleSquares: state.selectedPiece?.accessibleSquares ?? [],
     selectedSquare: state.selectedPiece?.square,
     previousMove: state.previousMove,
     inCheck: state.inCheck,
     turn: state.turn,
+    circleColor: state.circles[square],
   }))
 
   const [{ isOver }, drop] = useDrop({
@@ -80,6 +82,10 @@ export default ({ square, pieceInfo }: ChessBoardCellProps) => {
         justify-content: center;
         align-items: center;
       `}
+      onContextMenu={e => {
+        e.preventDefault()
+        drawCircle({ square, color: e.shiftKey ? "red" : "green" })
+      }}
       onClick={() => {
         if (!pieceInfo) {
           deselectPiece()
@@ -121,6 +127,8 @@ export default ({ square, pieceInfo }: ChessBoardCellProps) => {
           />
         </div>
       ) : null}
+
+      {circleColor && <Circle color={circleColor} />}
     </div>
   )
 }
@@ -135,6 +143,30 @@ const Overlay = styled.div`
   height: 100%;
   pointer-events: none;
 `
+
+type CircleProps = {
+  color: CircleColor
+}
+
+const Circle = ({ color }: CircleProps) => {
+  const strokeWidth = 5
+  const r = 50 - strokeWidth / 2
+
+  return (
+    <Overlay>
+      <svg viewBox="0 0 100 100">
+        <circle
+          cx="50"
+          cy="50"
+          r={r}
+          stroke={color}
+          strokeWidth={strokeWidth}
+          fill="none"
+        />
+      </svg>
+    </Overlay>
+  )
+}
 
 const PreviousMoveHighlight = styled(Overlay)`
   background: ${PREV_MOVE_HIGHLIGHT};

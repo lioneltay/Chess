@@ -8,9 +8,10 @@ import {
 } from "lib/chess"
 import { init, last, min, max } from "ramda"
 
-import { ChessColor, Square, Board, FEN } from "types"
+import { ChessColor, Square, Board, FEN, SquareMap, CircleColor } from "types"
 
 import { Action } from "./actions"
+import { seedSquareMap } from "consts"
 
 export type State = {
   fen: FEN
@@ -24,10 +25,9 @@ export type State = {
     accessibleSquares: Square[]
   }
   inCheck: boolean
+  circles: SquareMap<CircleColor | null>
 }
 
-// const initialFen =
-//   "rnbqkbnr/ppp1p1p1/8/3p1p1p/2P1P1P1/8/PP1P1P1P/RNBQKBNR w KQkq h6 0 4"
 const initialFen = NEW_GAME_FEN
 
 const initialState: State = {
@@ -37,6 +37,9 @@ const initialState: State = {
   ...fenToGameState(initialFen),
   selectedPiece: null,
   previousMove: null,
+  circles: {
+    ...seedSquareMap(null),
+  },
 }
 
 export const reducer = (state: State = initialState, action: Action): State => {
@@ -92,7 +95,7 @@ export const reducer = (state: State = initialState, action: Action): State => {
       const newFen = last(newHistory)
 
       if (!newFen) {
-        throw Error('History array has length 0')
+        throw Error("History array has length 0")
       }
 
       return {
@@ -144,6 +147,17 @@ export const reducer = (state: State = initialState, action: Action): State => {
         ...fenToGameState(newFen),
         historyCursor,
         fen: newFen,
+      }
+    }
+    case "DRAW_CIRCLE": {
+      const circleColor = state.circles[action.square]
+
+      return {
+        ...state,
+        circles: {
+          ...state.circles,
+          [action.square]: circleColor === action.color ? null : action.color,
+        },
       }
     }
     default: {
