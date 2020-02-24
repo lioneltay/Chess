@@ -4,7 +4,8 @@ import { reverse } from "ramda"
 
 export const NEW_GAME_FEN = Chess().fen()
 
-export const flipBoard = (board: Board): Board => reverse(board).map(reverse)
+export const flipBoard = (board: Board): Board =>
+  reverse(board).map(item => reverse(item))
 
 export const getValidMoves = (fen: FEN, square: Square): Square[] => {
   const game = Chess(fen)
