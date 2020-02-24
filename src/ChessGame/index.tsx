@@ -13,8 +13,9 @@ import { store, useSelector } from "./store"
 import { Provider as ReduxProvider } from "react-redux"
 
 const ChessGame = () => {
-  const { board } = useSelector(state => ({
+  const { board, flippedBoard } = useSelector(state => ({
     board: state.board,
+    flippedBoard: state.flippedBoard,
   }))
   const state = useSelector(state => {
     const blarg = { ...state }
@@ -33,7 +34,7 @@ const ChessGame = () => {
           max-width: 1000px;
         `}
       >
-        <ChessBoard board={board} />
+        <ChessBoard board={board} flippedBoard={flippedBoard} />
         <SVGOverlay />
       </div>
       <div>{state.fen}</div>

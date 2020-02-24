@@ -92,6 +92,13 @@ export const endDraw = ({ square }: EndDrawInput) =>
   } as const)
 type EndDrawAction = ReturnType<typeof endDraw>
 
+const FLIP_BOARD = "FLIP_BOARD"
+export const flipBoard = () =>
+  ({
+    type: FLIP_BOARD,
+  } as const)
+type FlipBoardAction = ReturnType<typeof flipBoard>
+
 export type Action =
   | MoveAction
   | SelectPieceAction
@@ -104,8 +111,10 @@ export type Action =
   | BeginDrawAction
   | EndDrawAction
   | UpdateDrawAction
+  | FlipBoardAction
 
 const actionCreators = {
+  flipBoard,
   endDraw,
   updateDraw,
   beginDraw,

@@ -8,14 +8,12 @@ import { PieceType, ChessColor, Square, DragData, CircleColor } from "types"
 
 import { DraggablePiece } from "ChessGame/components"
 
-import { coordinateFromSquare, numberToLetter } from "lib/chess"
+import { coordinateFromSquare, columnToLetter } from "lib/chess"
 
 import { useActions, useSelector } from "ChessGame/store"
 
-import { PIECE_TYPES, getColor } from "consts"
+import { PIECE_TYPES, getColor, tileColor, complementTileColor } from "consts"
 
-const DARK = "#F0D9B5"
-const LIGHT = "#B58863"
 const VALID_MOVE_HIGHLIGHT = "rgba(20,85,30,0.5)"
 const PREV_MOVE_HIGHLIGHT = "rgba(207, 255, 29, 0.5)"
 
@@ -39,7 +37,9 @@ export default ({ square, pieceInfo }: ChessBoardCellProps) => {
     inCheck,
     turn,
     circleColor,
+    flippedBoard,
   } = useSelector(state => ({
+    flippedBoard: state.flippedBoard,
     accessibleSquares: state.selectedPiece?.accessibleSquares ?? [],
     selectedSquare: state.selectedPiece?.square,
     previousMove: state.previousMove,
@@ -128,7 +128,7 @@ export default ({ square, pieceInfo }: ChessBoardCellProps) => {
         <PreviousMoveHighlight />
       ) : null}
 
-      <CoordinateLabels square={square} />
+      <CoordinateLabels square={square} flippedBoard={flippedBoard} />
 
       {pieceInfo ? (
         <div
@@ -147,12 +147,20 @@ export default ({ square, pieceInfo }: ChessBoardCellProps) => {
       ) : null}
 
       {circleColor && <Circle color={circleColor} />}
+
+      {/* <Overlay>
+        <h1>{square}</h1>
+      </Overlay> */}
     </div>
   )
 }
 
 type SquareProps = {
   square: Square
+}
+
+type FlippedBoardProps = {
+  flippedBoard: boolean
 }
 
 const Overlay = styled.div`
@@ -231,11 +239,13 @@ const ValidMoveDot = styled(Overlay)`
   height: 25%;
 `
 
-const CoordinateLabels = ({ square }: SquareProps) => {
-  const [x, y] = coordinateFromSquare(square)
+const CoordinateLabels = ({
+  square,
+  flippedBoard,
+}: SquareProps & FlippedBoardProps) => {
+  const [x, y] = coordinateFromSquare(square, { flippedBoard })
 
-  const color = tileColor(square)
-  const textColor = color === DARK ? LIGHT : DARK
+  const textColor = complementTileColor(tileColor(square))
 
   const svgStyle = {
     fontSize: "12",
@@ -251,7 +261,7 @@ const CoordinateLabels = ({ square }: SquareProps) => {
               {...svgStyle}
               x="95"
               y="5"
-              alignmentBaseline="hanging"
+              alignmentBaseline={"hanging"}
               textAnchor="end"
             >
               {y}
@@ -270,19 +280,11 @@ const CoordinateLabels = ({ square }: SquareProps) => {
               alignmentBaseline="baseline"
               textAnchor="start"
             >
-              {numberToLetter(x)}
+              {columnToLetter(x, { flippedBoard: false })}
             </text>
           </svg>
         </Overlay>
       ) : null}
     </Fragment>
   )
-}
-
-const tileColor = (square: Square) => {
-  const [x, y] = coordinateFromSquare(square)
-
-  const backgroundColor = (x + y) % 2 === 1 ? DARK : LIGHT
-
-  return backgroundColor
 }

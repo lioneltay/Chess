@@ -9,14 +9,19 @@ import { equals } from "ramda"
 type GetArrowCoordinatesOptions = {
   short?: boolean
   scale?: number
+  flippedBoard?: boolean
 }
 
 const getArrowCoordinates = (
   arrow: { from: Square; to: Square },
-  { short = false, scale = 100 }: GetArrowCoordinatesOptions = {},
+  {
+    short = false,
+    scale = 100,
+    flippedBoard = false,
+  }: GetArrowCoordinatesOptions = {},
 ) => {
-  const [tx, ty] = coordinateFromSquare(arrow.to)
-  const [fx, fy] = coordinateFromSquare(arrow.from)
+  const [tx, ty] = coordinateFromSquare(arrow.to, { flippedBoard })
+  const [fx, fy] = coordinateFromSquare(arrow.from, { flippedBoard })
 
   const angle = Math.atan2(ty - fy, tx - fx)
   const centerOffset = 0.5
@@ -35,7 +40,8 @@ const getArrowCoordinates = (
 }
 
 export default () => {
-  const { arrows, drawingState } = useSelector(state => ({
+  const { arrows, drawingState, flippedBoard } = useSelector(state => ({
+    flippedBoard: state.flippedBoard,
     arrows: state.arrows,
     drawingState: state.drawingState,
   }))
@@ -96,7 +102,11 @@ export default () => {
       </defs>
 
       {arrows.map(arrow => (
-        <Arrow key={arrow.from + arrow.to} {...arrow} />
+        <Arrow
+          key={arrow.from + arrow.to}
+          {...arrow}
+          flippedBoard={flippedBoard}
+        />
       ))}
 
       {drawingArrow && drawingArrow.to ? (
@@ -104,6 +114,7 @@ export default () => {
           to={drawingArrow.to}
           from={drawingArrow.from}
           color={drawingArrow.color}
+          flippedBoard={flippedBoard}
           short={short}
         />
       ) : null}
@@ -116,9 +127,10 @@ type ArrowProps = {
   from: Square
   to: Square
   short?: boolean
+  flippedBoard: boolean
 }
 
-const Arrow = ({ color, from, to, short }: ArrowProps) => {
+const Arrow = ({ color, from, to, short, flippedBoard }: ArrowProps) => {
   return (
     <line
       stroke={getColor(color)}
@@ -126,7 +138,7 @@ const Arrow = ({ color, from, to, short }: ArrowProps) => {
       strokeLinecap="round"
       markerEnd={`url(#arrowhead-${color === "grey" ? "pb" : color[0]})`}
       opacity={color === "grey" ? 0.4 : 0.7}
-      {...getArrowCoordinates({ from, to }, { short })}
+      {...getArrowCoordinates({ from, to }, { short, flippedBoard })}
     />
   )
 }

@@ -1,7 +1,10 @@
 import { Chess } from "./chess.js"
 import { Board, Move, FEN, PieceInfo, ChessColor, Square, PGN } from "types"
+import { reverse } from "ramda"
 
 export const NEW_GAME_FEN = Chess().fen()
+
+export const flipBoard = (board: Board): Board => reverse(board).map(reverse)
 
 export const getValidMoves = (fen: FEN, square: Square): Square[] => {
   const game = Chess(fen)

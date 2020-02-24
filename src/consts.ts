@@ -1,4 +1,6 @@
 import { PieceType, PieceName, SquareMap, ArrowColor } from "types"
+import { coordinateFromSquare } from "lib/chess"
+import { Square } from "types"
 
 export const GREEN = "#15781B"
 export const RED = "#882020"
@@ -100,4 +102,24 @@ export const seedSquareMap = <T extends any>(defaultValue: T): SquareMap<T> => {
     g1: defaultValue,
     h1: defaultValue,
   }
+}
+
+const DARK_SQUARE_BACKGROUND = "#F0D9B5"
+const LIGHT_SQUARE_BACKGROUND = "#B58863"
+
+type TileColor = typeof DARK_SQUARE_BACKGROUND | typeof LIGHT_SQUARE_BACKGROUND
+
+export const tileColor = (square: Square) => {
+  const [x, y] = coordinateFromSquare(square, { flippedBoard: false })
+
+  const backgroundColor =
+    (x + y) % 2 === 1 ? DARK_SQUARE_BACKGROUND : LIGHT_SQUARE_BACKGROUND
+
+  return backgroundColor
+}
+
+export const complementTileColor = (color: TileColor): TileColor => {
+  return color === DARK_SQUARE_BACKGROUND
+    ? LIGHT_SQUARE_BACKGROUND
+    : DARK_SQUARE_BACKGROUND
 }

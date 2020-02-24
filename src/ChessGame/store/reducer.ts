@@ -23,6 +23,9 @@ import { Action } from "./actions"
 import { seedSquareMap } from "consts"
 
 export type State = {
+  flippedBoard: boolean
+  aiEnabled: boolean
+  showBestMoves: boolean
   fen: FEN
   history: FEN[]
   historyCursor: number
@@ -48,6 +51,9 @@ type DrawingState = {
 const initialFen = NEW_GAME_FEN
 
 const initialState: State = {
+  flippedBoard: false,
+  aiEnabled: false,
+  showBestMoves: true,
   fen: initialFen,
   history: [initialFen],
   historyCursor: 0,
@@ -227,6 +233,12 @@ export const reducer = (state: State = initialState, action: Action): State => {
               ? remove(existingArrowIndex, 1, state.arrows)
               : state.arrows.concat(newArrow),
         }
+      }
+    }
+    case "FLIP_BOARD": {
+      return {
+        ...state,
+        flippedBoard: !state.flippedBoard,
       }
     }
     default: {

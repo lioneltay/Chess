@@ -38,13 +38,13 @@
 
 - [x] use svg for text labels so they scale with viewport
 
-- [ ] Drawing Arrows
+- [x] Drawing Arrows
 
-  - [ ] red and green
+  - [x] red and green
 
-- [ ] flip board
+- [x] flip board
 
-- [ ] play as black
+- [x] play as black
 
 - [ ] show best moves functionality
 

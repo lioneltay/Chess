@@ -34,7 +34,7 @@ export type Tile = {
 
 export type Move = { from: Square; to: Square }
 
-export type Board = Tile[][]
+export type Board = (Tile | null)[][]
 
 export type ChessColor = "w" | "b"
 

@@ -1,26 +1,20 @@
 import React from "react"
 import { noopTemplate as css } from "lib/utils"
-
 import { Tile } from "ChessGame/components"
-
-import { PieceType, ChessColor } from "types"
-
-import { squareFromCoordinate } from "lib/chess"
-
-type PieceInfo = {
-  type: PieceType
-  color: ChessColor
-}
+import { Board } from "types"
+import { squareFromCoordinate, flipBoard } from "lib/chess"
 
 type Props = {
-  board: (PieceInfo | null)[][]
+  board: Board
+  flippedBoard?: boolean
 }
 
-export default ({ board }: Props) => {
+export default ({ board: rawBoard, flippedBoard = false }: Props) => {
+  const board = flippedBoard ? flipBoard(rawBoard) : rawBoard
+
   return (
     <div
       css={css`
-
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
           0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 
@@ -46,7 +40,9 @@ export default ({ board }: Props) => {
         row.map((info, colIndex) => (
           <Tile
             key={`${rowIndex}-${colIndex}`}
-            square={squareFromCoordinate([colIndex + 1, 8 - rowIndex])}
+            square={squareFromCoordinate([colIndex + 1, 8 - rowIndex], {
+              flippedBoard,
+            })}
             pieceInfo={info}
           />
         )),
