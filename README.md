@@ -46,9 +46,9 @@
 
 - [x] play as black
 
-- [ ] show best moves functionality
+* [x] Implement AI opponent (Stockfish) (https://github.com/nmrugg/stockfish.js)
 
-* [ ] Implement AI opponent (Stockfish) (https://github.com/nmrugg/stockfish.js)
+- [ ] show best moves functionality
 
 ## Goalpost
 

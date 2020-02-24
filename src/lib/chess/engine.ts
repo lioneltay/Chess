@@ -7,7 +7,7 @@ export function getBestMove(
 ): Promise<{ from: Square; to: Square } | null> {
   stockfish.postMessage("ucinewgame")
   stockfish.postMessage("position fen " + fen)
-  stockfish.postMessage("go depth 21")
+  stockfish.postMessage("go depth 18")
 
   return new Promise(res => {
     stockfish.onmessage = function(event) {

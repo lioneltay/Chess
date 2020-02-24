@@ -24,7 +24,9 @@ import { seedSquareMap } from "consts"
 
 export type State = {
   flippedBoard: boolean
-  aiEnabled: boolean
+  ai: null | {
+    color: ChessColor
+  }
   showBestMoves: boolean
   fen: FEN
   history: FEN[]
@@ -52,7 +54,7 @@ const initialFen = NEW_GAME_FEN
 
 const initialState: State = {
   flippedBoard: false,
-  aiEnabled: false,
+  ai: { color: "b" },
   showBestMoves: true,
   fen: initialFen,
   history: [initialFen],

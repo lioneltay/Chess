@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { noopTemplate as css } from "lib/utils"
 import { DndProvider } from "react-dnd"
 import MultiBackend from "react-dnd-multi-backend"
@@ -8,14 +8,20 @@ import { ChessBoard, SVGOverlay } from "ChessGame/components"
 import { Controls } from "ChessGame/components"
 import { CustomDragPreview } from "ChessGame/components"
 
-import { store, useSelector } from "./store"
+import { store, useSelector, useActions } from "./store"
 
 import { Provider as ReduxProvider } from "react-redux"
 
+import { getBestMove } from "lib/chess"
+
 const ChessGame = () => {
-  const { board, flippedBoard } = useSelector(state => ({
+  const { move } = useActions()
+  const { board, flippedBoard, ai, turn, fen } = useSelector(state => ({
     board: state.board,
     flippedBoard: state.flippedBoard,
+    ai: state.ai,
+    turn: state.turn,
+    fen: state.fen,
   }))
   const state = useSelector(state => {
     const blarg = { ...state }
@@ -23,6 +29,19 @@ const ChessGame = () => {
     delete blarg.circles
     return blarg
   })
+
+  useEffect(() => {
+    console.log('EFFECT')
+    if (ai?.color === turn) {
+      console.log("MAKING MOVE")
+      getBestMove(fen).then(bestMove => {
+        console.log(`Best move is ${bestMove}`)
+        if (bestMove) {
+          move(bestMove)
+        }
+      })
+    }
+  }, [ai?.color === turn])
 
   return (
     <div>
