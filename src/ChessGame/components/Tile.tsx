@@ -12,7 +12,7 @@ import { coordinateFromSquare, numberToLetter } from "lib/chess"
 
 import { useActions, useSelector } from "ChessGame/store"
 
-import { PIECE_TYPES } from "consts"
+import { PIECE_TYPES, getColor } from "consts"
 
 const DARK = "#F0D9B5"
 const LIGHT = "#B58863"
@@ -31,7 +31,7 @@ type ChessBoardCellProps = {
 }
 
 export default ({ square, pieceInfo }: ChessBoardCellProps) => {
-  const { move, deselectPiece, drawCircle } = useActions()
+  const { move, deselectPiece, endDraw, updateDraw, beginDraw } = useActions()
   const {
     accessibleSquares,
     selectedSquare,
@@ -45,7 +45,12 @@ export default ({ square, pieceInfo }: ChessBoardCellProps) => {
     previousMove: state.previousMove,
     inCheck: state.inCheck,
     turn: state.turn,
-    circleColor: state.circles[square],
+    circleColor:
+      state.drawingState?.from === square &&
+      (state.drawingState?.to === square || state.drawingState?.to === null) &&
+      state.drawingState?.color !== "grey"
+        ? state.drawingState?.color
+        : state.circles[square],
   }))
 
   const [{ isOver }, drop] = useDrop({
@@ -84,7 +89,20 @@ export default ({ square, pieceInfo }: ChessBoardCellProps) => {
       `}
       onContextMenu={e => {
         e.preventDefault()
-        drawCircle({ square, color: e.shiftKey ? "red" : "green" })
+      }}
+      onMouseDown={e => {
+        if (e.button === 2) {
+          beginDraw({ square, color: e.shiftKey ? "red" : "green" })
+        }
+      }}
+      onMouseEnter={() => {
+        updateDraw({ square })
+      }}
+      onMouseUp={e => {
+        console.log(e.button)
+        if (e.button === 2) {
+          endDraw({ square })
+        }
       }}
       onClick={() => {
         if (!pieceInfo) {
@@ -159,7 +177,7 @@ const Circle = ({ color }: CircleProps) => {
           cx="50"
           cy="50"
           r={r}
-          stroke={color}
+          stroke={getColor(color)}
           strokeWidth={strokeWidth}
           fill="none"
         />

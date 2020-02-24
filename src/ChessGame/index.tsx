@@ -13,10 +13,13 @@ import { store, useSelector } from "./store"
 import { Provider as ReduxProvider } from "react-redux"
 
 const ChessGame = () => {
-  const board = useSelector(state => state.board)
+  const { board } = useSelector(state => ({
+    board: state.board,
+  }))
   const state = useSelector(state => {
     const blarg = { ...state }
     delete blarg.board
+    delete blarg.circles
     return blarg
   })
 

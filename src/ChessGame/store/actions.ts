@@ -64,15 +64,33 @@ export const goEnd = () =>
   } as const)
 type GoEndAction = ReturnType<typeof goEnd>
 
-const DRAW_CIRCLE = "DRAW_CIRCLE"
-type DrawCircleInput = { square: Square; color: CircleColor }
-export const drawCircle = ({ square, color }: DrawCircleInput) =>
+const BEGIN_DRAW = "BEGIN_DRAW"
+type BeginDrawInput = { square: Square; color: CircleColor }
+export const beginDraw = ({ square, color }: BeginDrawInput) =>
   ({
-    type: DRAW_CIRCLE,
+    type: BEGIN_DRAW,
     square,
     color,
   } as const)
-type DrawCircleAction = ReturnType<typeof drawCircle>
+type BeginDrawAction = ReturnType<typeof beginDraw>
+
+const UPDATE_DRAW = "UPDATE_DRAW"
+type UpdateDrawInput = { square: Square }
+export const updateDraw = ({ square }: UpdateDrawInput) =>
+  ({
+    type: UPDATE_DRAW,
+    square,
+  } as const)
+type UpdateDrawAction = ReturnType<typeof updateDraw>
+
+const END_DRAW = "END_DRAW"
+type EndDrawInput = { square: Square }
+export const endDraw = ({ square }: EndDrawInput) =>
+  ({
+    type: END_DRAW,
+    square,
+  } as const)
+type EndDrawAction = ReturnType<typeof endDraw>
 
 export type Action =
   | MoveAction
@@ -83,10 +101,14 @@ export type Action =
   | GoForwardAction
   | GoStartAction
   | GoEndAction
-  | DrawCircleAction
+  | BeginDrawAction
+  | EndDrawAction
+  | UpdateDrawAction
 
 const actionCreators = {
-  drawCircle,
+  endDraw,
+  updateDraw,
+  beginDraw,
   move,
   selectPiece,
   deselectPiece,

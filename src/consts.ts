@@ -1,4 +1,18 @@
-import { PieceType, PieceName, SquareMap } from "types"
+import { PieceType, PieceName, SquareMap, ArrowColor } from "types"
+
+export const GREEN = "#15781B"
+export const RED = "#882020"
+export const GREY = "#003088"
+
+const COLOR_MAP = {
+  red: RED,
+  green: GREEN,
+  grey: GREY,
+}
+
+export const getColor = (color: ArrowColor) => {
+  return COLOR_MAP[color]
+}
 
 export const PIECE_TYPES = ["r", "n", "b", "k", "q", "p"]
 

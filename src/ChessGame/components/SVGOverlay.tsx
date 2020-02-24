@@ -1,68 +1,60 @@
 import React from "react"
 import { noopTemplate as css } from "lib/utils"
-import { Square, Vector2D } from "types"
+import { Square, Arrow as ArrowType, ArrowColor } from "types"
 import { coordinateFromSquare } from "lib/chess"
+import { useSelector } from "ChessGame/store"
+import { getColor } from "consts"
+import { equals } from "ramda"
 
-const WIDTH = 100
-const HEIGHT = 100
-
-type Arrow = {
-  from: Square
-  to: Square
+type GetArrowCoordinatesOptions = {
+  short?: boolean
+  scale?: number
 }
 
-type Props = {
-  arrows: Arrow[]
-}
+const getArrowCoordinates = (
+  arrow: { from: Square; to: Square },
+  { short = false, scale = 100 }: GetArrowCoordinatesOptions = {},
+) => {
+  const [tx, ty] = coordinateFromSquare(arrow.to)
+  const [fx, fy] = coordinateFromSquare(arrow.from)
 
-type Position = {
-  x: number
-  y: number
-}
-
-const percentageCoordinateOfCenter = (
-  from: Square,
-  to: Square,
-  scale: number = 100,
-): { from: Position; to: Position } => {
-  const [tx, ty] = coordinateFromSquare(to)
-  const [fx, fy] = coordinateFromSquare(from)
-  const toOffset = 10 / 8 / 100
-  const fromOffset = -6 / 8 / 100
+  const angle = Math.atan2(ty - fy, tx - fx)
   const centerOffset = 0.5
+  const toOffsetMagnitude = (short ? 35 : 15) / scale
+  const toXOffset = Math.cos(angle) * toOffsetMagnitude
+  const toYOffset = Math.sin(angle) * toOffsetMagnitude
+  const fromXOffset = 0
+  const fromYOffset = 0
 
   return {
-    from: {
-      x: ((fx - centerOffset) / 8 - fromOffset) * scale,
-      y: ((fy - centerOffset) / 8 - fromOffset) * scale,
-    },
-    to: {
-      x: ((tx - centerOffset) / 8 - toOffset) * scale,
-      y: ((ty - centerOffset) / 8 - toOffset) * scale,
-    },
+    x1: ((fx - centerOffset - fromXOffset) / 8) * scale,
+    y1: scale - ((fy - centerOffset - fromYOffset) / 8) * scale,
+    x2: ((tx - centerOffset - toXOffset) / 8) * scale,
+    y2: scale - ((ty - centerOffset - toYOffset) / 8) * scale,
   }
 }
 
-const getArrowCoordinates = (arrow: Arrow) => {
-  const { to, from } = percentageCoordinateOfCenter(arrow.from, arrow.to)
+export default () => {
+  const { arrows, drawingState } = useSelector(state => ({
+    arrows: state.arrows,
+    drawingState: state.drawingState,
+  }))
 
-  const ret = {
-    x1: from.x,
-    y1: from.y,
-    x2: to.x,
-    y2: to.y,
-  }
+  const drawingArrow =
+    drawingState &&
+    drawingState.from &&
+    drawingState.to &&
+    drawingState.from !== drawingState.to
+      ? drawingState
+      : null
 
-  console.log(ret)
+  const short = !!arrows.find(arrow => equals(arrow, drawingArrow))
 
-  return ret
-}
-
-export default ({ arrows }: Props) => {
   return (
     <svg
       viewBox="0 0 100 100"
       css={css`
+        pointer-events: none;
         position: absolute;
         top: 0;
         left: 0;
@@ -103,33 +95,18 @@ export default ({ arrows }: Props) => {
         </marker>
       </defs>
 
-      {/* <line
-        stroke="#003088"
-        strokeWidth="22.5"
-        strokeLinecap="round"
-        markerEnd="url(#arrowhead-pb)"
-        opacity="0.4"
-        x1="30"
-        y1="30"
-        x2="70"
-        y2="70"
-      ></line> */}
+      {arrows.map(arrow => (
+        <Arrow key={arrow.from + arrow.to} {...arrow} />
+      ))}
 
-      {/* <line
-        stroke="#15781B"
-        strokeWidth="15"
-        strokeLinecap="round"
-        markerEnd="url(#arrowhead-g)"
-        opacity="0.4"
-        x1="30"
-        y1="30"
-        x2="70.3933982822018"
-        y2="70.6066017177982"
-      ></line> */}
-
-      <Arrow from="a1" to="b2" color="red" />
-      <Arrow from="a2" to="b3" color="green" />
-      <Arrow from="a3" to="b4" color="grey" />
+      {drawingArrow && drawingArrow.to ? (
+        <Arrow
+          to={drawingArrow.to}
+          from={drawingArrow.from}
+          color={drawingArrow.color}
+          short={short}
+        />
+      ) : null}
     </svg>
   )
 }
@@ -138,26 +115,18 @@ type ArrowProps = {
   color: "red" | "green" | "grey"
   from: Square
   to: Square
+  short?: boolean
 }
 
-const GREEN = "#15781B"
-const RED = "#882020"
-const GREY = "#003088"
-const COLOR_MAP = {
-  red: RED,
-  green: GREEN,
-  grey: GREY,
-}
-
-const Arrow = ({ color, from, to }: ArrowProps) => {
+const Arrow = ({ color, from, to, short }: ArrowProps) => {
   return (
     <line
-      stroke={COLOR_MAP[color]}
-      strokeWidth="2"
+      stroke={getColor(color)}
+      strokeWidth="1.8"
       strokeLinecap="round"
       markerEnd={`url(#arrowhead-${color === "grey" ? "pb" : color[0]})`}
       opacity={color === "grey" ? 0.4 : 0.7}
-      {...getArrowCoordinates({ from, to })}
-    ></line>
+      {...getArrowCoordinates({ from, to }, { short })}
+    />
   )
 }

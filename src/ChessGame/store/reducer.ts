@@ -6,9 +6,18 @@ import {
   getValidMoves,
   NEW_GAME_FEN,
 } from "lib/chess"
-import { init, last, min, max } from "ramda"
+import { init, last, min, max, equals, remove } from "ramda"
 
-import { ChessColor, Square, Board, FEN, SquareMap, CircleColor } from "types"
+import {
+  ChessColor,
+  Square,
+  Board,
+  FEN,
+  SquareMap,
+  CircleColor,
+  ArrowColor,
+  Arrow,
+} from "types"
 
 import { Action } from "./actions"
 import { seedSquareMap } from "consts"
@@ -26,6 +35,14 @@ export type State = {
   }
   inCheck: boolean
   circles: SquareMap<CircleColor | null>
+  arrows: Arrow[]
+  drawingState: null | DrawingState
+}
+
+type DrawingState = {
+  from: Square
+  to: Square | null
+  color: ArrowColor
 }
 
 const initialFen = NEW_GAME_FEN
@@ -40,6 +57,8 @@ const initialState: State = {
   circles: {
     ...seedSquareMap(null),
   },
+  arrows: [],
+  drawingState: null,
 }
 
 export const reducer = (state: State = initialState, action: Action): State => {
@@ -149,15 +168,65 @@ export const reducer = (state: State = initialState, action: Action): State => {
         fen: newFen,
       }
     }
-    case "DRAW_CIRCLE": {
-      const circleColor = state.circles[action.square]
+    case "BEGIN_DRAW": {
+      return {
+        ...state,
+        drawingState: {
+          color: action.color,
+          from: action.square,
+          to: null,
+        },
+      }
+    }
+    case "UPDATE_DRAW": {
+      if (!state.drawingState) {
+        return state
+      }
 
       return {
         ...state,
-        circles: {
-          ...state.circles,
-          [action.square]: circleColor === action.color ? null : action.color,
+        drawingState: {
+          ...state.drawingState,
+          to: action.square,
         },
+      }
+    }
+    case "END_DRAW": {
+      const data = state.drawingState
+
+      if (!data) {
+        return state
+      }
+
+      if (data.from === action.square) {
+        return {
+          ...state,
+          drawingState: null,
+          circles: {
+            ...state.circles,
+            [data.from]:
+              state.circles[data.from] === data.color ? null : data.color,
+          },
+        }
+      } else {
+        const newArrow = {
+          color: data.color,
+          from: data.from,
+          to: action.square,
+        }
+
+        const existingArrowIndex = state.arrows.findIndex(arrow =>
+          equals(arrow, newArrow),
+        )
+
+        return {
+          ...state,
+          drawingState: null,
+          arrows:
+            existingArrowIndex >= 0
+              ? remove(existingArrowIndex, 1, state.arrows)
+              : state.arrows.concat(newArrow),
+        }
       }
     }
     default: {

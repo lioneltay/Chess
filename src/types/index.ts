@@ -5,6 +5,14 @@ export type CircleColor = "red" | "green"
 
 export type SquareMap<T> = Record<Square, T>
 
+export type Arrow = {
+  from: Square
+  to: Square
+  color: ArrowColor
+}
+
+export type ArrowColor = "red" | "green" | "grey"
+
 export type PieceInfo = {
   type: PieceType
   color: ChessColor
