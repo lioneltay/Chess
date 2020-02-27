@@ -48,21 +48,40 @@
 
 * [x] Implement AI opponent (Stockfish) (https://github.com/nmrugg/stockfish.js)
 
-- [ ] show best moves functionality
-  - [ ] create an rxjs stream
-  - [ ] Thunk action that listens to a rxjs stream and updates store
+- [x] show best moves functionality
 
-- [ ] show animated score bar
+- [x] undo during ais turn (coniditonally go back 1 or 2 turns)
 
-* [ ] Start new game button
+- [ ] refactor all state manipulation logic into selectors
+
+- [x] Moves should always be applied to latest board
+- [x] disable movement of ai pieces
+- [x] Save history of moves to highlight previous moves
+
+* [x] create an rxjs stream
+
+* [x] redux observable for best move calculations
+
+* [x] show animated score bar
+
+* [ ] improve performance (many rerenders)
+  - [ ] Expand selectors
+
+- [ ] Start new game button
+  - [ ] install material ui
+  - [ ] create modal
   - [ ] Show options
   - [ ] Toggle Choose ai
   - [ ] choose side
 
+* [ ] Add promotion
+
+  - [ ] ai promotion
+
+* [ ] double ai mode
+
 ## Goalpost
 
-- [ ] Add promotion
+- [ ] improve performance
 
-* [ ] improve performance
-
-- [ ] Test the drag and drop functionality
+* [ ] Test the drag and drop functionality

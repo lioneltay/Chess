@@ -62,3 +62,13 @@ export const fenToGameState = (fen: FEN): GameState => {
     inDraw: game.in_draw(),
   }
 }
+
+export const getTurn = (fen: FEN): ChessColor => {
+  const game = Chess(fen)
+  return game.turn()
+}
+
+export const getInCheck = (fen: FEN): boolean => {
+  const game = Chess(fen)
+  return game.in_check()
+}

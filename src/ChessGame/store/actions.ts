@@ -1,6 +1,6 @@
 import { bindActionCreators } from "redux"
 import { useDispatch } from "react-redux"
-import { Square, CircleColor, Move } from "types"
+import { Square, CircleColor, Move, FEN } from "types"
 
 export const MOVE = "MOVE"
 type MoveInput = { from: Square; to: Square }
@@ -83,7 +83,7 @@ export const updateDraw = ({ square }: UpdateDrawInput) =>
   } as const)
 type UpdateDrawAction = ReturnType<typeof updateDraw>
 
-const END_DRAW = "END_DRAW"
+export const END_DRAW = "END_DRAW"
 type EndDrawInput = { square: Square }
 export const endDraw = ({ square }: EndDrawInput) =>
   ({
@@ -92,7 +92,7 @@ export const endDraw = ({ square }: EndDrawInput) =>
   } as const)
 type EndDrawAction = ReturnType<typeof endDraw>
 
-const FLIP_BOARD = "FLIP_BOARD"
+export const FLIP_BOARD = "FLIP_BOARD"
 export const flipBoard = () =>
   ({
     type: FLIP_BOARD,
@@ -100,15 +100,31 @@ export const flipBoard = () =>
 type FlipBoardAction = ReturnType<typeof flipBoard>
 
 const SET_BEST_MOVE = "SET_BEST_MOVE"
-type SetBestMoveInput = { move: Move }
-export const setBestMove = ({ move }: SetBestMoveInput) =>
+type SetBestMoveInput = {
+  bestMove: Move
+  historyCursor: number
+  fen: FEN
+  final?: boolean
+  evaluation?: number
+}
+export const setBestMove = ({
+  bestMove,
+  historyCursor,
+  fen,
+  final,
+  evaluation,
+}: SetBestMoveInput) =>
   ({
     type: SET_BEST_MOVE,
-    move,
+    bestMove,
+    historyCursor,
+    fen,
+    final,
+    evaluation,
   } as const)
-type SetBestMoveAction = ReturnType<typeof setBestMove>
+export type SetBestMoveAction = ReturnType<typeof setBestMove>
 
-const SET_SHOW_BEST_MOVE = "SET_SHOW_BEST_MOVE"
+export const SET_SHOW_BEST_MOVE = "SET_SHOW_BEST_MOVE"
 type SetShowBestMoveInput = { show: boolean }
 export const setShowBestMove = ({ show }: SetShowBestMoveInput) =>
   ({
@@ -116,6 +132,19 @@ export const setShowBestMove = ({ show }: SetShowBestMoveInput) =>
     show,
   } as const)
 type SetShowBestMoveAction = ReturnType<typeof setShowBestMove>
+
+export const CALCULATE_BEST_MOVE = "CALCULATE_BEST_MOVE"
+type CalculateBestMoveInput = {
+  fen: FEN
+  historyCursor: number
+}
+const calculateBestMove = ({ fen, historyCursor }: CalculateBestMoveInput) =>
+  ({
+    type: CALCULATE_BEST_MOVE,
+    fen,
+    historyCursor,
+  } as const)
+export type CalculateBestMoveAction = ReturnType<typeof calculateBestMove>
 
 export type Action =
   | MoveAction
@@ -132,8 +161,10 @@ export type Action =
   | FlipBoardAction
   | SetBestMoveAction
   | SetShowBestMoveAction
+  | CalculateBestMoveAction
 
 const actionCreators = {
+  calculateBestMove,
   setShowBestMove,
   setBestMove,
   flipBoard,

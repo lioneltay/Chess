@@ -2,6 +2,7 @@ import { Howl } from "howler"
 import { Middleware, Dispatch } from "redux"
 import { MOVE, Action } from "../actions"
 import { State } from "../reducer"
+import { fen } from "../selectors"
 
 import { getValidMoves, getPiece } from "lib/chess"
 
@@ -17,13 +18,13 @@ export const soundMiddleWare: Middleware<
   if (action.type === MOVE) {
     const state = store.getState()
     const move = { from: action.from, to: action.to }
-    const moves = getValidMoves(state.fen, move.from)
+    const moves = getValidMoves(fen(state), move.from)
 
     let playMoveSound = () => {}
 
     // Move is valid
     if (moves.includes(move.to)) {
-      const targetPiece = getPiece(state.fen, move.to)
+      const targetPiece = getPiece(fen(state), move.to)
       if (targetPiece) {
         playMoveSound = () => captureSound.play()
       } else {

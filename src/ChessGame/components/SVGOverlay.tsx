@@ -46,11 +46,11 @@ export default () => {
     flippedBoard,
     bestMove,
     showBestMove,
-  } = useSelector(state => ({
+  } = useSelector((state, s) => ({
     flippedBoard: state.flippedBoard,
     arrows: state.arrows,
     drawingState: state.drawingState,
-    bestMove: state.bestMove,
+    bestMove: s.bestMove(state),
     showBestMove: state.showBestMove,
   }))
 

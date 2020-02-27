@@ -8,45 +8,24 @@ import { ChessBoard, SVGOverlay } from "ChessGame/components"
 import { Controls } from "ChessGame/components"
 import { CustomDragPreview } from "ChessGame/components"
 
-import { store, useSelector, useActions } from "./store"
+import { configureStore, useSelector, useActions } from "./store"
 
 import { Provider as ReduxProvider } from "react-redux"
 
-import { getBestMove } from "lib/chess"
-
 const ChessGame = () => {
-  const { move, setBestMove } = useActions()
-  const { board, flippedBoard, ai, turn, fen, showBestMove } = useSelector(
-    state => ({
-      board: state.board,
-      flippedBoard: state.flippedBoard,
-      ai: state.ai,
-      turn: state.turn,
-      fen: state.fen,
+  const { calculateBestMove } = useActions()
+  const { turn, fen, showBestMove, historyCursor } = useSelector(
+    (state, s) => ({
+      historyCursor: state.historyCursor,
+      turn: s.turn(state),
+      fen: s.fen(state),
       showBestMove: state.showBestMove,
     }),
   )
 
-  const state = useSelector(state => {
-    const blarg = { ...state }
-    delete blarg.board
-    delete blarg.circles
-    return blarg
-  })
-
-  useEffect(() => {
-    if (ai?.color === turn) {
-      getBestMove(fen).then(bestMove => {
-        if (bestMove) {
-          move(bestMove)
-        }
-      })
-    }
-  }, [ai?.color === turn])
-
   useEffect(() => {
     if (showBestMove) {
-      getBestMove(fen, move => setBestMove({ move }))
+      calculateBestMove({ fen, historyCursor })
     }
   }, [showBestMove, turn])
 
@@ -60,18 +39,17 @@ const ChessGame = () => {
           max-width: 1000px;
         `}
       >
-        <ChessBoard board={board} flippedBoard={flippedBoard} />
+        <ChessBoard />
+
         <SVGOverlay />
       </div>
-      {/* <div>{state.fen}</div>
-      <pre>{JSON.stringify(state, null, 2)}</pre> */}
     </div>
   )
 }
 
 export default () => {
   return (
-    <ReduxProvider store={store}>
+    <ReduxProvider store={configureStore()}>
       <DndProvider backend={MultiBackend} options={HTML5toTouch}>
         <Controls />
         <ChessGame />

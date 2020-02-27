@@ -5,8 +5,9 @@ import {
   getPiece,
   getValidMoves,
   NEW_GAME_FEN,
+  getTurn,
 } from "lib/chess"
-import { init, last, min, max, equals, remove } from "ramda"
+import { init, last, min, max, equals, remove, insert, pipe } from "ramda"
 
 import {
   ChessColor,
@@ -23,24 +24,28 @@ import {
 import { Action } from "./actions"
 import { seedSquareMap } from "consts"
 
+import * as selectors from "./selectors"
+
+export type HistoryItem = {
+  fen: FEN
+  turn: ChessColor
+  previousMove: Move | null
+  bestMove: Move | null
+  evaluation: number | null
+}
+
 export type State = {
   flippedBoard: boolean
   ai: null | {
     color: ChessColor
   }
   showBestMove: boolean
-  bestMove: Move | null
-  fen: FEN
-  history: FEN[]
+  history: HistoryItem[]
   historyCursor: number
-  board: Board
-  turn: ChessColor
-  previousMove: { from: Square; to: Square } | null
   selectedPiece: null | {
     square: Square
     accessibleSquares: Square[]
   }
-  inCheck: boolean
   circles: SquareMap<CircleColor | null>
   arrows: Arrow[]
   drawingState: null | DrawingState
@@ -56,15 +61,20 @@ const initialFen = NEW_GAME_FEN
 
 const initialState: State = {
   flippedBoard: false,
-  ai: { color: "b" },
+  // ai: { color: "b" },
+  ai: null,
   showBestMove: true,
-  bestMove: null,
-  fen: initialFen,
-  history: [initialFen],
+  history: [
+    {
+      fen: initialFen,
+      previousMove: null,
+      bestMove: null,
+      turn: getTurn(initialFen),
+      evaluation: null,
+    },
+  ],
   historyCursor: 0,
-  ...fenToGameState(initialFen),
   selectedPiece: null,
-  previousMove: null,
   circles: {
     ...seedSquareMap(null),
   },
@@ -76,22 +86,25 @@ export const reducer = (state: State = initialState, action: Action): State => {
   switch (action.type) {
     case "MOVE": {
       const moveObj = { from: action.from, to: action.to }
-      const fen = move(state.fen, moveObj)
+      const fen = move(selectors.latestFen(state), moveObj)
+      const navigating = selectors.navigating(state)
 
       return {
         ...state,
-        ...fenToGameState(fen),
-        fen,
-        history: state.history.concat(fen),
-        historyCursor: state.historyCursor + 1,
+        history: state.history.concat({
+          turn: getTurn(fen),
+          fen,
+          previousMove: moveObj,
+          bestMove: null,
+          evaluation: null,
+        }),
+        historyCursor: state.historyCursor + (navigating ? 0 : 1),
         selectedPiece: null,
-        previousMove: moveObj,
-        bestMove: null,
       }
     }
     case "SELECT_PIECE": {
-      const pieceInfo = getPiece(state.fen, action.square)
-      const turn = state.turn
+      const pieceInfo = getPiece(selectors.fen(state), action.square)
+      const turn = selectors.turn(state)
 
       const pieceOfCorrectColor = pieceInfo?.color === turn
 
@@ -103,7 +116,7 @@ export const reducer = (state: State = initialState, action: Action): State => {
         ...state,
         selectedPiece: {
           square: action.square,
-          accessibleSquares: getValidMoves(state.fen, action.square),
+          accessibleSquares: getValidMoves(selectors.fen(state), action.square),
         },
       }
     }
@@ -118,27 +131,21 @@ export const reducer = (state: State = initialState, action: Action): State => {
       }
     }
     case "UNDO": {
-      // Cannot undo at start of game or on the AI's turn
-      if (state.historyCursor === 0 || state.ai?.color === state.turn) {
+      // Cannot undo at start of game
+      if (state.historyCursor === 0) {
         return state
       }
 
-      const stepsBack = state.ai ? 2 : 1
+      const stepsBack =
+        state.ai && state.ai.color !== selectors.turn(state) ? 2 : 1
 
       const newHistory = state.history.slice(
         0,
         state.history.length - stepsBack,
       )
-      const newFen = last(newHistory)
-
-      if (!newFen) {
-        throw Error("History array has length 0")
-      }
 
       return {
         ...state,
-        ...fenToGameState(newFen),
-        fen: newFen,
         history: newHistory,
         historyCursor: state.historyCursor - stepsBack,
       }
@@ -148,9 +155,7 @@ export const reducer = (state: State = initialState, action: Action): State => {
       const newFen = state.history[historyCursor]
       return {
         ...state,
-        ...fenToGameState(newFen),
         historyCursor,
-        fen: newFen,
       }
     }
     case "GO_FORWARD": {
@@ -158,32 +163,23 @@ export const reducer = (state: State = initialState, action: Action): State => {
         state.history.length - 1,
         state.historyCursor + 1,
       )
-      const newFen = state.history[historyCursor]
       return {
         ...state,
-        ...fenToGameState(newFen),
         historyCursor,
-        fen: newFen,
       }
     }
     case "GO_END": {
       const historyCursor = state.history.length - 1
-      const newFen = state.history[historyCursor]
       return {
         ...state,
-        ...fenToGameState(newFen),
         historyCursor,
-        fen: newFen,
       }
     }
     case "GO_START": {
       const historyCursor = 0
-      const newFen = state.history[historyCursor]
       return {
         ...state,
-        ...fenToGameState(newFen),
         historyCursor,
-        fen: newFen,
       }
     }
     case "BEGIN_DRAW": {
@@ -254,9 +250,28 @@ export const reducer = (state: State = initialState, action: Action): State => {
       }
     }
     case "SET_BEST_MOVE": {
+      const historyItem = state.history[action.historyCursor]
+
+      if (historyItem?.fen !== action.fen) {
+        return state
+      }
+
+      const newHistoryItem: HistoryItem = {
+        ...historyItem,
+        bestMove: action.bestMove,
+      }
+
+      if (typeof action.evaluation === "number") {
+        newHistoryItem.evaluation = action.evaluation
+      }
+
       return {
         ...state,
-        bestMove: action.move,
+        history: insert(
+          action.historyCursor,
+          newHistoryItem,
+          remove(action.historyCursor, 1, state.history),
+        ),
       }
     }
     case "SET_SHOW_BEST_MOVE": {
@@ -264,6 +279,9 @@ export const reducer = (state: State = initialState, action: Action): State => {
         ...state,
         showBestMove: action.show,
       }
+    }
+    case "CALCULATE_BEST_MOVE": {
+      return state
     }
     default: {
       assertNever(action)

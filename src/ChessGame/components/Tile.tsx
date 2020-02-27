@@ -38,13 +38,13 @@ export default ({ square, pieceInfo }: ChessBoardCellProps) => {
     turn,
     circleColor,
     flippedBoard,
-  } = useSelector(state => ({
+  } = useSelector((state, s) => ({
     flippedBoard: state.flippedBoard,
     accessibleSquares: state.selectedPiece?.accessibleSquares ?? [],
     selectedSquare: state.selectedPiece?.square,
-    previousMove: state.previousMove,
-    inCheck: state.inCheck,
-    turn: state.turn,
+    previousMove: s.previousMove(state),
+    inCheck: s.inCheck(state),
+    turn: s.turn(state),
     circleColor:
       state.drawingState?.from === square &&
       (state.drawingState?.to === square || state.drawingState?.to === null) &&

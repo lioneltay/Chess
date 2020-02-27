@@ -1,16 +1,35 @@
 import { createStore, applyMiddleware } from "redux"
 
 import { reducer, State } from "./reducer"
-import { useSelector as originalUseSelector } from "react-redux"
+import { useSelector as originalUseSelector, shallowEqual } from "react-redux"
 
 import { soundMiddleWare } from "./middleware/soundMiddleware"
+import { rootEpic } from "./epics"
+import { createEpicMiddleware } from "redux-observable"
 
-export const store = createStore(reducer, applyMiddleware(soundMiddleWare))
+import * as selectors from "./selectors"
+
+export const configureStore = () => {
+  const epicMiddleware = createEpicMiddleware()
+
+  const store = createStore(
+    reducer,
+    applyMiddleware(soundMiddleWare, epicMiddleware),
+  )
+
+  epicMiddleware.run(rootEpic as any)
+
+  return store
+}
 
 export const useSelector = <T extends any>(
-  selector: (state: State) => T,
+  selector: (state: State, selectorsObj: typeof selectors) => T,
+  equalityFn?: (left: T, right: T) => boolean,
 ): T => {
-  return originalUseSelector(selector)
+  return originalUseSelector(
+    (state: State) => selector(state, selectors),
+    equalityFn || shallowEqual,
+  )
 }
 
 export * from "./actions"
