@@ -1,7 +1,7 @@
 import { State, HistoryItem } from "./reducer"
 import { fenToBoard, getTurn, getInCheck } from "lib/chess"
 import { FEN, Move } from "types"
-import { last } from "ramda"
+import { last, memoizeWith } from "ramda"
 
 export const latestHistoryItem = (state: State): HistoryItem => {
   const historyItem = last(state.history)
@@ -20,7 +20,10 @@ export const fen = (state: State): FEN => {
 
 export const latestBoard = (state: State) => fenToBoard(latestFen(state))
 
-export const board = (state: State) => fenToBoard(fen(state))
+export const board = memoizeWith(
+  state => fen(state),
+  (state: State) => fenToBoard(fen(state)),
+)
 
 export const turn = (state: State) => getTurn(latestHistoryItem(state).fen)
 

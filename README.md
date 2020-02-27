@@ -64,8 +64,10 @@
 
 * [x] show animated score bar
 
-* [ ] improve performance (many rerenders)
-  - [ ] Expand selectors
+* [x] improve performance (many rerenders)
+  - [x] Expand selectors
+  - [x] memoize board selector
+  - [x] React.memo
 
 - [ ] Start new game button
   - [ ] install material ui

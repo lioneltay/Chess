@@ -1,6 +1,7 @@
-import React, { Fragment } from "react"
+import React, { Fragment, memo } from "react"
 import styled from "styled-components"
 import { noopTemplate as css } from "lib/utils"
+import { shallowEqual } from "react-redux"
 
 import { useDrop } from "react-dnd"
 
@@ -24,11 +25,10 @@ type PieceInfo = {
 
 type ChessBoardCellProps = {
   square: Square
-  children?: React.ReactNode
   pieceInfo?: PieceInfo | null
 }
 
-export default ({ square, pieceInfo }: ChessBoardCellProps) => {
+const Tile = ({ square, pieceInfo }: ChessBoardCellProps) => {
   const { move, deselectPiece, endDraw, updateDraw, beginDraw } = useActions()
   const {
     accessibleSquares,
@@ -38,20 +38,24 @@ export default ({ square, pieceInfo }: ChessBoardCellProps) => {
     turn,
     circleColor,
     flippedBoard,
-  } = useSelector((state, s) => ({
-    flippedBoard: state.flippedBoard,
-    accessibleSquares: state.selectedPiece?.accessibleSquares ?? [],
-    selectedSquare: state.selectedPiece?.square,
-    previousMove: s.previousMove(state),
-    inCheck: s.inCheck(state),
-    turn: s.turn(state),
-    circleColor:
-      state.drawingState?.from === square &&
-      (state.drawingState?.to === square || state.drawingState?.to === null) &&
-      state.drawingState?.color !== "grey"
-        ? state.drawingState?.color
-        : state.circles[square],
-  }))
+  } = useSelector(
+    (state, s) => ({
+      flippedBoard: state.flippedBoard,
+      accessibleSquares: state.selectedPiece?.accessibleSquares ?? [],
+      selectedSquare: state.selectedPiece?.square,
+      previousMove: s.previousMove(state),
+      inCheck: s.inCheck(state),
+      turn: s.turn(state),
+      circleColor:
+        state.drawingState?.from === square &&
+        (state.drawingState?.to === square ||
+          state.drawingState?.to === null) &&
+        state.drawingState?.color !== "grey"
+          ? state.drawingState?.color
+          : state.circles[square],
+    }),
+    () => true,
+  )
 
   const [{ isOver }, drop] = useDrop({
     accept: PIECE_TYPES,
@@ -288,3 +292,10 @@ const CoordinateLabels = ({
     </Fragment>
   )
 }
+
+export default memo(Tile, (prev, next) => {
+  return (
+    shallowEqual(prev.pieceInfo, next.pieceInfo) &&
+    shallowEqual(prev.square, next.square)
+  )
+})

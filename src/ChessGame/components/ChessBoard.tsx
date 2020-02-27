@@ -8,23 +8,17 @@ import { clamp } from "ramda"
 import { useSelector } from "ChessGame/store"
 
 export default () => {
-  const { evaluation, board, flippedBoard } = useSelector((state, s) => {
+  const { board, flippedBoard } = useSelector((state, s) => {
     const rawBoard = s.board(state)
     const board = state.flippedBoard ? flipBoard(rawBoard) : rawBoard
 
     return {
-      evaluation: s.evaluation(state) || 0,
-      board: s.board(state),
+      board,
       flippedBoard: state.flippedBoard,
     }
   })
 
-  const showEvaluation = typeof evaluation !== null
-
-  const calculateScore = () => {
-    const score = ((evaluation / 100 + 10) / 20) * 100
-    return clamp(2, 98, score)
-  }
+  const showEvaluation = true
 
   return (
     <div
@@ -69,50 +63,70 @@ export default () => {
         )}
       </div>
 
-      {showEvaluation && (
-        <div
-          css={css`
-            background: white;
-            position: relative;
-          `}
-        >
-          <div
-            css={css`
-              position: absolute;
-              top: 0;
-              left: 0;
-              background: #878787;
-              width: 100%;
-              height: ${100 - calculateScore()}%;
-            `}
-          />
+      {showEvaluation && <EvaluationBar />}
+    </div>
+  )
+}
 
-          <div
-            css={css`
-              position: absolute;
+const EvaluationBar = () => {
+  const { evaluation, board, flippedBoard } = useSelector((state, s) => {
+    const rawBoard = s.board(state)
+    const board = state.flippedBoard ? flipBoard(rawBoard) : rawBoard
 
-              display: flex;
-              flex-direction: column;
-              justify-content: space-between;
+    return {
+      evaluation: s.evaluation(state) || 0,
+      board,
+      flippedBoard: state.flippedBoard,
+    }
+  })
 
-              top: 0;
-              left: 0;
-              height: 100%;
-              width: 100%;
-            `}
-          >
-            <div />
-            <div style={{ background: "#D8D8D8", height: 2 }} />
-            <div style={{ background: "#D8D8D8", height: 2 }} />
-            <div style={{ background: "#D8D8D8", height: 2 }} />
-            <div style={{ background: "#EEBCAB", height: 5 }} />
-            <div style={{ background: "#D8D8D8", height: 2 }} />
-            <div style={{ background: "#D8D8D8", height: 2 }} />
-            <div style={{ background: "#D8D8D8", height: 2 }} />
-            <div />
-          </div>
-        </div>
-      )}
+  const calculateScore = () => {
+    const score = ((evaluation / 100 + 10) / 20) * 100
+    return clamp(2, 98, score)
+  }
+
+  return (
+    <div
+      css={css`
+        background: white;
+        position: relative;
+      `}
+    >
+      <div
+        css={css`
+          position: absolute;
+          top: 0;
+          left: 0;
+          background: #878787;
+          width: 100%;
+          height: ${100 - calculateScore()}%;
+        `}
+      />
+
+      <div
+        css={css`
+          position: absolute;
+
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+        `}
+      >
+        <div />
+        <div style={{ background: "#D8D8D8", height: 2 }} />
+        <div style={{ background: "#D8D8D8", height: 2 }} />
+        <div style={{ background: "#D8D8D8", height: 2 }} />
+        <div style={{ background: "#EEBCAB", height: 5 }} />
+        <div style={{ background: "#D8D8D8", height: 2 }} />
+        <div style={{ background: "#D8D8D8", height: 2 }} />
+        <div style={{ background: "#D8D8D8", height: 2 }} />
+        <div />
+      </div>
     </div>
   )
 }
