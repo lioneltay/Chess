@@ -21,12 +21,14 @@ type Props = {
 export default ({ piece, color, square }: Props) => {
   const dragRef = useRef<HTMLDivElement | null>(null)
   const { selectPiece, deselectPiece } = useActions()
-  const { selectedSquare, turn, ai, navigating } = useSelector((state, s) => ({
-    selectedSquare: state.selectedPiece?.square,
-    turn: s.turn(state),
-    ai: state.ai,
-    navigating: s.navigating(state),
-  }))
+  const { selectedSquare, turn, isPlayerTurn, navigating } = useSelector(
+    (state, s) => ({
+      selectedSquare: state.selectedPiece?.square,
+      turn: s.turn(state),
+      isPlayerTurn: s.isPlayerTurn(state),
+      navigating: s.navigating(state),
+    }),
+  )
 
   const [{ isDragging, canDrag }, drag, preview] = useDrag({
     item: {
@@ -37,7 +39,7 @@ export default ({ piece, color, square }: Props) => {
         dimension: dragRef.current?.getBoundingClientRect().width,
       },
     },
-    canDrag: () => turn === color && turn !== ai?.color && !navigating,
+    canDrag: () => turn === color && isPlayerTurn && !navigating,
     begin: () => {
       selectPiece({ square })
     },

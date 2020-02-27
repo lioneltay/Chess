@@ -32,7 +32,7 @@ const aiMoveEpic = (
 
       if (
         // ai is enabled and it is the ai's turn
-        state.ai?.color === selectors.turn(state) &&
+        selectors.isAiTurn(state) &&
         // The calculated best move is for the last move
         lastHistoryItem.fen === action.fen
       ) {

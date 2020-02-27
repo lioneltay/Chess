@@ -1,5 +1,16 @@
 import React, { useEffect } from "react"
 import { useActions, useSelector } from "ChessGame/store"
+import {
+  FastForward,
+  FastRewind,
+  SkipNext,
+  SkipPrevious,
+  Replay,
+  ScreenRotation,
+  Computer,
+  Menu,
+} from "@material-ui/icons"
+import { IconButton, Tooltip } from "@material-ui/core"
 
 export default () => {
   const {
@@ -12,8 +23,10 @@ export default () => {
     setShowBestMove,
   } = useActions()
 
-  const { showBestMove } = useSelector(state => ({
+  const { showBestMove, atEnd, atStart } = useSelector((state, s) => ({
     showBestMove: state.showBestMove,
+    atEnd: !s.navigating(state),
+    atStart: state.historyCursor === 0,
   }))
 
   useEffect(() => {
@@ -43,16 +56,43 @@ export default () => {
 
   return (
     <div>
-      <h1>Controls</h1>
-      <button onClick={() => setShowBestMove({ show: !showBestMove })}>
-        {showBestMove ? "Hide" : "Show"} Best Move
-      </button>
-      <button onClick={flipBoard}>Flip Board</button>
-      <button onClick={undo}>Undo</button>
-      <button onClick={goStart}>Start</button>
-      <button onClick={goBack}>Back</button>
-      <button onClick={goForward}>Forward</button>
-      <button onClick={goEnd}>End</button>
+      <Tooltip title="Show best move">
+        <IconButton onClick={() => setShowBestMove({ show: !showBestMove })}>
+          <Computer color={showBestMove ? "primary" : undefined} />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Flip board">
+        <IconButton onClick={flipBoard}>
+          <ScreenRotation />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Undo">
+        <IconButton onClick={undo}>
+          <Replay />
+        </IconButton>
+      </Tooltip>
+
+      <IconButton onClick={goStart} disabled={atStart}>
+        <FastRewind />
+      </IconButton>
+
+      <IconButton onClick={goBack} disabled={atStart}>
+        <SkipPrevious />
+      </IconButton>
+
+      <IconButton onClick={goForward} disabled={atEnd}>
+        <SkipNext />
+      </IconButton>
+
+      <IconButton onClick={goEnd} disabled={atEnd}>
+        <FastForward />
+      </IconButton>
+
+      <IconButton>
+        <Menu />
+      </IconButton>
     </div>
   )
 }

@@ -34,11 +34,13 @@ export type HistoryItem = {
   evaluation: number | null
 }
 
+type Player = "player"
+type AI = "ai"
+
 export type State = {
   flippedBoard: boolean
-  ai: null | {
-    color: ChessColor
-  }
+  white: Player | AI
+  black: Player | AI
   showBestMove: boolean
   history: HistoryItem[]
   historyCursor: number
@@ -61,9 +63,9 @@ const initialFen = NEW_GAME_FEN
 
 const initialState: State = {
   flippedBoard: false,
-  // ai: { color: "b" },
-  ai: null,
-  showBestMove: true,
+  white: "player",
+  black: "ai",
+  showBestMove: false,
   history: [
     {
       fen: initialFen,
@@ -136,18 +138,10 @@ export const reducer = (state: State = initialState, action: Action): State => {
         return state
       }
 
-      const stepsBack =
-        state.ai && state.ai.color !== selectors.turn(state) ? 2 : 1
-
-      const newHistory = state.history.slice(
-        0,
-        state.history.length - stepsBack,
-      )
-
       return {
         ...state,
-        history: newHistory,
-        historyCursor: state.historyCursor - stepsBack,
+        history: init(state.history),
+        historyCursor: state.historyCursor - 1,
       }
     }
     case "GO_BACK": {

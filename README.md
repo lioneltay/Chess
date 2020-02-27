@@ -69,6 +69,8 @@
   - [x] memoize board selector
   - [x] React.memo
 
+- [ ] Ai without show best move
+
 - [ ] Start new game button
   - [ ] install material ui
   - [ ] create modal

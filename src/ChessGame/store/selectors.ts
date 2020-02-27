@@ -41,3 +41,8 @@ export const bestMove = (state: State, historyCursor?: number): Move | null => {
 }
 
 export const evaluation = (state: State) => latestHistoryItem(state).evaluation
+
+export const isAiTurn = (state: State): boolean =>
+  turn(state) === "w" ? state.white === "ai" : state.black === "ai"
+
+export const isPlayerTurn = (state: State): boolean => !isAiTurn(state)

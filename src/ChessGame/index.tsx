@@ -4,7 +4,7 @@ import { DndProvider } from "react-dnd"
 import MultiBackend from "react-dnd-multi-backend"
 import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch"
 
-import { ChessBoard, SVGOverlay } from "ChessGame/components"
+import { ChessBoard } from "ChessGame/components"
 import { Controls } from "ChessGame/components"
 import { CustomDragPreview } from "ChessGame/components"
 
@@ -40,8 +40,9 @@ const ChessGame = () => {
         `}
       >
         <ChessBoard />
-
-        <SVGOverlay />
+        <div className="fj-e">
+          <Controls />
+        </div>
       </div>
     </div>
   )
@@ -51,10 +52,21 @@ export default () => {
   return (
     <ReduxProvider store={configureStore()}>
       <DndProvider backend={MultiBackend} options={HTML5toTouch}>
-        <Controls />
         <ChessGame />
         <CustomDragPreview />
+        {/* <ShowState /> */}
       </DndProvider>
     </ReduxProvider>
   )
+}
+
+const ShowState = () => {
+  const state = useSelector(state => state)
+
+  const showState = { ...state }
+
+  delete showState.circles
+  delete showState.arrows
+
+  return <pre>{JSON.stringify(showState, null, 2)}</pre>
 }

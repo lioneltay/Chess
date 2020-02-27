@@ -38,24 +38,20 @@ const Tile = ({ square, pieceInfo }: ChessBoardCellProps) => {
     turn,
     circleColor,
     flippedBoard,
-  } = useSelector(
-    (state, s) => ({
-      flippedBoard: state.flippedBoard,
-      accessibleSquares: state.selectedPiece?.accessibleSquares ?? [],
-      selectedSquare: state.selectedPiece?.square,
-      previousMove: s.previousMove(state),
-      inCheck: s.inCheck(state),
-      turn: s.turn(state),
-      circleColor:
-        state.drawingState?.from === square &&
-        (state.drawingState?.to === square ||
-          state.drawingState?.to === null) &&
-        state.drawingState?.color !== "grey"
-          ? state.drawingState?.color
-          : state.circles[square],
-    }),
-    () => true,
-  )
+  } = useSelector((state, s) => ({
+    flippedBoard: state.flippedBoard,
+    accessibleSquares: state.selectedPiece?.accessibleSquares ?? [],
+    selectedSquare: state.selectedPiece?.square,
+    previousMove: s.previousMove(state),
+    inCheck: s.inCheck(state),
+    turn: s.turn(state),
+    circleColor:
+      state.drawingState?.from === square &&
+      (state.drawingState?.to === square || state.drawingState?.to === null) &&
+      state.drawingState?.color !== "grey"
+        ? state.drawingState?.color
+        : state.circles[square],
+  }))
 
   const [{ isOver }, drop] = useDrop({
     accept: PIECE_TYPES,
@@ -151,10 +147,6 @@ const Tile = ({ square, pieceInfo }: ChessBoardCellProps) => {
       ) : null}
 
       {circleColor && <Circle color={circleColor} />}
-
-      {/* <Overlay>
-        <h1>{square}</h1>
-      </Overlay> */}
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import React from "react"
 import { noopTemplate as css } from "lib/utils"
-import { Tile } from "ChessGame/components"
+import { Tile, SVGOverlay } from "ChessGame/components"
 import { Board } from "types"
 import { squareFromCoordinate, flipBoard } from "lib/chess"
 import { clamp } from "ramda"
@@ -32,35 +32,43 @@ export default () => {
     >
       <div
         css={css`
-          display: grid;
-          grid-template-columns: repeat(8, 1fr);
-          grid-auto-rows: 1fr;
-
-          &::before {
-            content: "";
-            width: 0;
-            padding-bottom: 100%;
-            grid-row: 1 / 1;
-            grid-column: 1 / 1;
-          }
-
-          & > *:first-child {
-            grid-row: 1 / 1;
-            grid-column: 1 / 1;
-          }
+          position: relative;
         `}
       >
-        {board.map((row, rowIndex) =>
-          row.map((info, colIndex) => (
-            <Tile
-              key={`${rowIndex}-${colIndex}`}
-              square={squareFromCoordinate([colIndex + 1, 8 - rowIndex], {
-                flippedBoard,
-              })}
-              pieceInfo={info}
-            />
-          )),
-        )}
+        <div
+          css={css`
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-auto-rows: 1fr;
+
+            &::before {
+              content: "";
+              width: 0;
+              padding-bottom: 100%;
+              grid-row: 1 / 1;
+              grid-column: 1 / 1;
+            }
+
+            & > *:first-child {
+              grid-row: 1 / 1;
+              grid-column: 1 / 1;
+            }
+          `}
+        >
+          {board.map((row, rowIndex) =>
+            row.map((info, colIndex) => (
+              <Tile
+                key={`${rowIndex}-${colIndex}`}
+                square={squareFromCoordinate([colIndex + 1, 8 - rowIndex], {
+                  flippedBoard,
+                })}
+                pieceInfo={info}
+              />
+            )),
+          )}
+        </div>
+
+        <SVGOverlay />
       </div>
 
       {showEvaluation && <EvaluationBar />}
