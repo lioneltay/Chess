@@ -45,13 +45,13 @@ export default () => {
     drawingState,
     flippedBoard,
     bestMove,
-    showBestMove,
+    engineOn,
   } = useSelector((state, s) => ({
     flippedBoard: state.flippedBoard,
     arrows: state.arrows,
     drawingState: state.drawingState,
     bestMove: s.bestMove(state),
-    showBestMove: state.showBestMove,
+    engineOn: state.engineOn,
   }))
 
   const drawingArrow =
@@ -127,7 +127,7 @@ export default () => {
         />
       ) : null}
 
-      {showBestMove && bestMove ? (
+      {engineOn && bestMove ? (
         <Arrow
           to={bestMove.to}
           from={bestMove.from}

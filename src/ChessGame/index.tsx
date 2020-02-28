@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, Fragment } from "react"
 import { noopTemplate as css } from "lib/utils"
 import { DndProvider } from "react-dnd"
 import MultiBackend from "react-dnd-multi-backend"
@@ -13,38 +13,26 @@ import { configureStore, useSelector, useActions } from "./store"
 import { Provider as ReduxProvider } from "react-redux"
 
 const ChessGame = () => {
-  const { calculateBestMove } = useActions()
-  const { turn, fen, showBestMove, historyCursor } = useSelector(
-    (state, s) => ({
-      historyCursor: state.historyCursor,
-      turn: s.turn(state),
-      fen: s.fen(state),
-      showBestMove: state.showBestMove,
-    }),
-  )
-
-  useEffect(() => {
-    if (showBestMove) {
-      calculateBestMove({ fen, historyCursor })
-    }
-  }, [showBestMove, turn])
-
   return (
-    <div>
-      <div
-        css={css`
-          position: relative;
-          margin-left: auto;
-          margin-right: auto;
-          max-width: 1000px;
-        `}
-      >
-        <ChessBoard />
-        <div className="fj-e">
-          <Controls />
+    <Fragment>
+      <SideEffects />
+
+      <div>
+        <div
+          css={css`
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 1000px;
+          `}
+        >
+          <ChessBoard />
+          <div className="fj-e">
+            <Controls />
+          </div>
         </div>
       </div>
-    </div>
+    </Fragment>
   )
 }
 
@@ -58,6 +46,39 @@ export default () => {
       </DndProvider>
     </ReduxProvider>
   )
+}
+
+const SideEffects = () => {
+  const { calculateBestMove, aiMove } = useActions()
+  const {
+    turn,
+    fen,
+    engineOn,
+    historyCursor,
+    isAiTurn,
+    turnNumber,
+  } = useSelector((state, s) => ({
+    historyCursor: state.historyCursor,
+    turn: s.turn(state),
+    fen: s.fen(state),
+    engineOn: state.engineOn,
+    isAiTurn: s.isAiTurn(state),
+    turnNumber: s.turnNumber(state),
+  }))
+
+  useEffect(() => {
+    if (isAiTurn) {
+      aiMove()
+    }
+  }, [isAiTurn, turnNumber])
+
+  useEffect(() => {
+    if (engineOn) {
+      calculateBestMove({ fen, historyCursor })
+    }
+  }, [engineOn, turn])
+
+  return null
 }
 
 const ShowState = () => {

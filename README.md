@@ -69,20 +69,24 @@
   - [x] memoize board selector
   - [x] React.memo
 
-- [ ] Ai without show best move
+- [x] Ai without show best move
 
-- [ ] Start new game button
-  - [ ] install material ui
-  - [ ] create modal
-  - [ ] Show options
-  - [ ] Toggle Choose ai
-  - [ ] choose side
+* [x] double ai mode
+
+- [x] Start new game button
+  - [x] install material ui
+  - [x] create modal
+  - [x] Show options
+  - [x] Toggle Choose ai
+  - [x] choose side
 
 * [ ] Add promotion
 
   - [ ] ai promotion
 
-* [ ] double ai mode
+- [ ] draw detection
+- [ ] checkmate detection
+
 
 ## Goalpost
 

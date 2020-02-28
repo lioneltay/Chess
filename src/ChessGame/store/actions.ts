@@ -1,6 +1,7 @@
 import { bindActionCreators } from "redux"
 import { useDispatch } from "react-redux"
 import { Square, CircleColor, Move, FEN } from "types"
+import { SideConfig } from "./reducer"
 
 export const MOVE = "MOVE"
 type MoveInput = { from: Square; to: Square }
@@ -124,14 +125,14 @@ export const setBestMove = ({
   } as const)
 export type SetBestMoveAction = ReturnType<typeof setBestMove>
 
-export const SET_SHOW_BEST_MOVE = "SET_SHOW_BEST_MOVE"
+export const SET_ENGINE_ON = "SET_ENGINE_ON"
 type SetShowBestMoveInput = { show: boolean }
-export const setShowBestMove = ({ show }: SetShowBestMoveInput) =>
+export const setEngineOn = ({ show }: SetShowBestMoveInput) =>
   ({
-    type: SET_SHOW_BEST_MOVE,
+    type: SET_ENGINE_ON,
     show,
   } as const)
-type SetShowBestMoveAction = ReturnType<typeof setShowBestMove>
+type setEngineOnAction = ReturnType<typeof setEngineOn>
 
 export const CALCULATE_BEST_MOVE = "CALCULATE_BEST_MOVE"
 type CalculateBestMoveInput = {
@@ -146,7 +147,31 @@ const calculateBestMove = ({ fen, historyCursor }: CalculateBestMoveInput) =>
   } as const)
 export type CalculateBestMoveAction = ReturnType<typeof calculateBestMove>
 
+export const AI_MOVE = "AI_MOVE"
+const aiMove = () =>
+  ({
+    type: AI_MOVE,
+  } as const)
+export type AiMoveAction = ReturnType<typeof aiMove>
+
+export const START_NEW_GAME = "START_NEW_GAME"
+type StartNewGameInput = {
+  white: SideConfig
+  black: SideConfig
+  flippedBoard: boolean
+}
+const startNewGame = ({ white, black, flippedBoard }: StartNewGameInput) =>
+  ({
+    type: START_NEW_GAME,
+    white,
+    black,
+    flippedBoard,
+  } as const)
+export type StartNewGameAction = ReturnType<typeof startNewGame>
+
 export type Action =
+  | StartNewGameAction
+  | AiMoveAction
   | MoveAction
   | SelectPieceAction
   | DeselectPieceAction
@@ -160,12 +185,14 @@ export type Action =
   | UpdateDrawAction
   | FlipBoardAction
   | SetBestMoveAction
-  | SetShowBestMoveAction
+  | setEngineOnAction
   | CalculateBestMoveAction
 
 const actionCreators = {
+  startNewGame,
+  aiMove,
   calculateBestMove,
-  setShowBestMove,
+  setEngineOn,
   setBestMove,
   flipBoard,
   endDraw,

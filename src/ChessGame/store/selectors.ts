@@ -46,3 +46,5 @@ export const isAiTurn = (state: State): boolean =>
   turn(state) === "w" ? state.white === "ai" : state.black === "ai"
 
 export const isPlayerTurn = (state: State): boolean => !isAiTurn(state)
+
+export const turnNumber = (state: State): number => state.history.length

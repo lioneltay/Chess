@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, Fragment, useState } from "react"
 import { useActions, useSelector } from "ChessGame/store"
 import {
   FastForward,
@@ -12,6 +12,8 @@ import {
 } from "@material-ui/icons"
 import { IconButton, Tooltip } from "@material-ui/core"
 
+import SettingsModal from "./SettingsModal"
+
 export default () => {
   const {
     undo,
@@ -20,11 +22,11 @@ export default () => {
     goForward,
     goStart,
     flipBoard,
-    setShowBestMove,
+    setEngineOn,
   } = useActions()
 
-  const { showBestMove, atEnd, atStart } = useSelector((state, s) => ({
-    showBestMove: state.showBestMove,
+  const { engineOn, atEnd, atStart } = useSelector((state, s) => ({
+    engineOn: state.engineOn,
     atEnd: !s.navigating(state),
     atStart: state.historyCursor === 0,
   }))
@@ -54,45 +56,51 @@ export default () => {
     return () => document.removeEventListener("keydown", handler)
   }, [])
 
+  const [open, setOpen] = useState(false)
+
   return (
-    <div>
-      <Tooltip title="Show best move">
-        <IconButton onClick={() => setShowBestMove({ show: !showBestMove })}>
-          <Computer color={showBestMove ? "primary" : undefined} />
+    <Fragment>
+      <SettingsModal open={open} onClose={() => setOpen(false)} />
+
+      <div>
+        <Tooltip title="Show best move">
+          <IconButton onClick={() => setEngineOn({ show: !engineOn })}>
+            <Computer color={engineOn ? "primary" : undefined} />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="Flip board">
+          <IconButton onClick={flipBoard}>
+            <ScreenRotation />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="Undo">
+          <IconButton onClick={undo}>
+            <Replay />
+          </IconButton>
+        </Tooltip>
+
+        <IconButton onClick={goStart} disabled={atStart}>
+          <FastRewind />
         </IconButton>
-      </Tooltip>
 
-      <Tooltip title="Flip board">
-        <IconButton onClick={flipBoard}>
-          <ScreenRotation />
+        <IconButton onClick={goBack} disabled={atStart}>
+          <SkipPrevious />
         </IconButton>
-      </Tooltip>
 
-      <Tooltip title="Undo">
-        <IconButton onClick={undo}>
-          <Replay />
+        <IconButton onClick={goForward} disabled={atEnd}>
+          <SkipNext />
         </IconButton>
-      </Tooltip>
 
-      <IconButton onClick={goStart} disabled={atStart}>
-        <FastRewind />
-      </IconButton>
+        <IconButton onClick={goEnd} disabled={atEnd}>
+          <FastForward />
+        </IconButton>
 
-      <IconButton onClick={goBack} disabled={atStart}>
-        <SkipPrevious />
-      </IconButton>
-
-      <IconButton onClick={goForward} disabled={atEnd}>
-        <SkipNext />
-      </IconButton>
-
-      <IconButton onClick={goEnd} disabled={atEnd}>
-        <FastForward />
-      </IconButton>
-
-      <IconButton>
-        <Menu />
-      </IconButton>
-    </div>
+        <IconButton onClick={() => setOpen(true)}>
+          <Menu />
+        </IconButton>
+      </div>
+    </Fragment>
   )
 }

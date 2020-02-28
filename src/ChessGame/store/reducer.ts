@@ -36,12 +36,13 @@ export type HistoryItem = {
 
 type Player = "player"
 type AI = "ai"
+export type SideConfig = Player | AI
 
 export type State = {
   flippedBoard: boolean
   white: Player | AI
   black: Player | AI
-  showBestMove: boolean
+  engineOn: boolean
   history: HistoryItem[]
   historyCursor: number
   selectedPiece: null | {
@@ -65,7 +66,7 @@ const initialState: State = {
   flippedBoard: false,
   white: "player",
   black: "ai",
-  showBestMove: false,
+  engineOn: false,
   history: [
     {
       fen: initialFen,
@@ -268,12 +269,21 @@ export const reducer = (state: State = initialState, action: Action): State => {
         ),
       }
     }
-    case "SET_SHOW_BEST_MOVE": {
+    case "SET_ENGINE_ON": {
       return {
         ...state,
-        showBestMove: action.show,
+        engineOn: action.show,
       }
     }
+    case "START_NEW_GAME": {
+      return {
+        ...initialState,
+        white: action.white,
+        black: action.black,
+        flippedBoard: action.flippedBoard,
+      }
+    }
+    case "AI_MOVE":
     case "CALCULATE_BEST_MOVE": {
       return state
     }
