@@ -39,6 +39,7 @@ type AI = "ai"
 export type SideConfig = Player | AI
 
 export type State = {
+  gameOver: boolean
   flippedBoard: boolean
   white: Player | AI
   black: Player | AI
@@ -63,6 +64,7 @@ type DrawingState = {
 const initialFen = NEW_GAME_FEN
 
 const initialState: State = {
+  gameOver: false,
   flippedBoard: false,
   white: "player",
   black: "player",

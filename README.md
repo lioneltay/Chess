@@ -80,14 +80,20 @@
   - [x] Toggle Choose ai
   - [x] choose side
 
+
 * [ ] Add promotion
 
   - [ ] ai promotion
 
 - [ ] draw detection
+- [ ] stalemate detection
 - [ ] checkmate detection
+- [ ] game over detection
 
-- [ ] evaluation bar goes up and down
+- [ ] show end game status
+- [ ] winner, draw, stalemate
+
+- [ ] [bug] evaluation bar goes up and down on every move
 
 
 ## Goalpost

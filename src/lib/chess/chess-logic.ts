@@ -72,3 +72,13 @@ export const getInCheck = (fen: FEN): boolean => {
   const game = Chess(fen)
   return game.in_check()
 }
+
+export const getInDraw = (fen: FEN): boolean => {
+  const game = Chess(fen)
+  return game.in_draw()
+}
+
+export const getInStalemate = (fen: FEN): boolean => {
+  const game = Chess(fen)
+  return game.in_stalemate()
+}
