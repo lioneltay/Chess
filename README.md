@@ -87,6 +87,8 @@
 - [ ] draw detection
 - [ ] checkmate detection
 
+- [ ] evaluation bar goes up and down
+
 
 ## Goalpost
 

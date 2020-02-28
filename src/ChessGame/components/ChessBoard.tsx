@@ -8,17 +8,16 @@ import { clamp } from "ramda"
 import { useSelector } from "ChessGame/store"
 
 export default () => {
-  const { board, flippedBoard } = useSelector((state, s) => {
+  const { board, flippedBoard, showEvaluation } = useSelector((state, s) => {
     const rawBoard = s.board(state)
     const board = state.flippedBoard ? flipBoard(rawBoard) : rawBoard
 
     return {
       board,
       flippedBoard: state.flippedBoard,
+      showEvaluation: state.engineOn,
     }
   })
-
-  const showEvaluation = true
 
   return (
     <div
