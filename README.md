@@ -4,6 +4,7 @@ Basic Chess App
 
 ## Features
 
+- Complete Chess Logic/Rules
 - Drag and drop with `react-dnd`
 - Stockfish AI opponent and game analysis
 - Basic game controls (undo/forwards/backwards)
