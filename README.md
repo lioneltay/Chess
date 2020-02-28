@@ -1,3 +1,26 @@
+# Chess App
+
+Basic Chess App
+
+## Features
+
+- Drag and drop with `react-dnd`
+- Stockfish AI opponent and game analysis
+- Basic game controls (undo/forwards/backwards)
+
+## Tech
+
+- Typescript
+- Drag and drop with `react-dnd`
+- `redux` state management
+- `redux-observable` + WebWorker for async best move calculations
+- `howler` for game sounds
+- `styled-components` css in jss styling
+- `@material-ui` material design components
+- `formik` forms
+- hosted on Google App Engine
+- TravisCI deployment
+
 # Tasks
 
 - [x] Add sprites
@@ -80,7 +103,6 @@
   - [x] Toggle Choose ai
   - [x] choose side
 
-
 * [ ] Add promotion
 
   - [ ] ai promotion
@@ -94,7 +116,6 @@
 - [ ] winner, draw, stalemate
 
 - [ ] [bug] evaluation bar goes up and down on every move
-
 
 ## Goalpost
 
