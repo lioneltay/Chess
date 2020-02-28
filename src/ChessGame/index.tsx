@@ -17,8 +17,14 @@ const ChessGame = () => {
     <Fragment>
       <SideEffects />
 
-      <div>
+      <div
+        css={css`
+          background: #edebe9;
+          min-height: 100vh;
+        `}
+      >
         <div
+          className="pt-6"
           css={css`
             position: relative;
             margin-left: auto;
