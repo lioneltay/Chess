@@ -56,7 +56,7 @@ export default () => {
     return () => document.removeEventListener("keydown", handler)
   }, [])
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
 
   return (
     <Fragment>

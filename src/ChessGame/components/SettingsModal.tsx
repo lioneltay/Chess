@@ -8,6 +8,7 @@ import {
   FormControlLabel,
   Switch,
   IconButton,
+  Avatar,
 } from "@material-ui/core"
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab"
 import { Person, Computer, Clear } from "@material-ui/icons"
@@ -51,7 +52,7 @@ export default ({ open, onClose }: Props) => {
         startNewGame({
           white: values.white,
           black: values.black,
-          flippedBoard: values.flippedBoard,
+          flippedBoard: values.black === "player" && values.white !== "player",
         })
       }}
     >
@@ -74,6 +75,7 @@ export default ({ open, onClose }: Props) => {
                   flex-direction: column;
                   align-items: center;
                   padding: 24px;
+                  min-width: 240px;
                 `}
               >
                 <div
@@ -95,36 +97,18 @@ export default ({ open, onClose }: Props) => {
                   Settings
                 </Typography>
 
-                <Typography variant="subtitle1" gutterBottom>
-                  White
-                </Typography>
                 <PlayerToggle
+                  color="white"
                   value={values.white}
                   onChange={value => setFieldValue("white", value)}
                 />
 
-                <Typography variant="subtitle1" gutterBottom>
-                  Black
-                </Typography>
                 <PlayerToggle
+                  className="mt-4"
+                  color="black"
                   value={values.black}
                   onChange={value => setFieldValue("black", value)}
                 />
-
-                <div className="mt-3">
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={values.flippedBoard}
-                        onChange={(e, value) =>
-                          setFieldValue("flippedBoard", value)
-                        }
-                        color="primary"
-                      />
-                    }
-                    label="Flip Board"
-                  />
-                </div>
 
                 <div className="fj-e mt-4">
                   <Button color="primary" type="submit" variant="outlined">
@@ -140,26 +124,64 @@ export default ({ open, onClose }: Props) => {
   )
 }
 
-type PlayerToggleProps = {
+type PlayerToggleProps = Stylable & {
   value: Config
   onChange: (value: Config) => void
+  color: "white" | "black"
 }
 
-const PlayerToggle = ({ value, onChange }: PlayerToggleProps) => {
+const PlayerToggle = ({
+  value,
+  onChange,
+  color,
+  ...rest
+}: PlayerToggleProps) => {
   return (
-    <ToggleButtonGroup
-      value={value}
-      exclusive
-      onChange={(_, value) => onChange(value)}
-      aria-label="text alignment"
+    <div
+      {...rest}
+      css={css`
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 12px;
+        align-items: center;
+      `}
     >
-      <ToggleButton value="player">
-        <Person />
-      </ToggleButton>
+      <div className="fj-e">
+        <Avatar>
+          {value === "ai" ? (
+            <Computer
+              css={css`
+                color: ${color};
+              `}
+            />
+          ) : (
+            <Person
+              css={css`
+                color: ${color};
+              `}
+            />
+          )}
+        </Avatar>
+      </div>
 
-      <ToggleButton value="ai">
-        <Computer />
-      </ToggleButton>
-    </ToggleButtonGroup>
+      <ToggleButtonGroup
+        value={value}
+        exclusive
+        onChange={(_, value) => {
+          if (value !== null) {
+            onChange(value)
+          }
+        }}
+        aria-label="text alignment"
+      >
+        <ToggleButton value="player">
+          <Person />
+        </ToggleButton>
+
+        <ToggleButton value="ai">
+          <Computer />
+        </ToggleButton>
+      </ToggleButtonGroup>
+    </div>
   )
 }
