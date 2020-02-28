@@ -65,7 +65,7 @@ const initialFen = NEW_GAME_FEN
 const initialState: State = {
   flippedBoard: false,
   white: "player",
-  black: "ai",
+  black: "player",
   engineOn: false,
   history: [
     {

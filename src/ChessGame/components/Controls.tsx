@@ -56,14 +56,14 @@ export default () => {
     return () => document.removeEventListener("keydown", handler)
   }, [])
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
 
   return (
     <Fragment>
       <SettingsModal open={open} onClose={() => setOpen(false)} />
 
       <div>
-        <Tooltip title="Show best move">
+        <Tooltip title={`Engine ${engineOn ? "On" : "Off"}`}>
           <IconButton onClick={() => setEngineOn({ show: !engineOn })}>
             <Computer color={engineOn ? "primary" : undefined} />
           </IconButton>
