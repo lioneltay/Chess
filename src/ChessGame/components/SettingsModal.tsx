@@ -67,17 +67,17 @@ export default ({ open, onClose }: Props) => {
               align-items: center;
             `}
           >
-            <Form>
-              <Paper
-                css={css`
-                  position: absolute;
-                  display: flex;
-                  flex-direction: column;
-                  align-items: center;
-                  padding: 24px;
-                  min-width: 240px;
-                `}
-              >
+            <Paper
+              css={css`
+                position: absolute;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 24px;
+                min-width: 240px;
+              `}
+            >
+              <Form>
                 <div
                   css={css`
                     position: absolute;
@@ -115,8 +115,8 @@ export default ({ open, onClose }: Props) => {
                     Start
                   </Button>
                 </div>
-              </Paper>
-            </Form>
+              </Form>{" "}
+            </Paper>
           </div>
         </Modal>
       )}

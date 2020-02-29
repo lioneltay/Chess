@@ -19,7 +19,7 @@ Basic Chess App
 - `styled-components` css in jss styling
 - `@material-ui` material design components
 - `formik` forms
-- hosted on Google App Engine
+- Hosted on Google App Engine
 - TravisCI deployment
 
 # Tasks
@@ -118,8 +118,6 @@ Basic Chess App
 
 - [ ] [bug] evaluation bar goes up and down on every move
 
-## Goalpost
+* [ ] improve performance
 
-- [ ] improve performance
-
-* [ ] Test the drag and drop functionality
+- [ ] Test the drag and drop functionality
