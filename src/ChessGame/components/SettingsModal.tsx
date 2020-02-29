@@ -67,17 +67,16 @@ export default ({ open, onClose }: Props) => {
               align-items: center;
             `}
           >
-            <Paper
-              css={css`
-                position: absolute;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 24px;
-                min-width: 240px;
-              `}
-            >
-              <Form>
+            <Paper>
+              <Form
+                css={css`
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  padding: 24px;
+                  min-width: 240px;
+                `}
+              >
                 <div
                   css={css`
                     position: absolute;
@@ -92,24 +91,20 @@ export default ({ open, onClose }: Props) => {
                     <Clear />
                   </IconButton>
                 </div>
-
                 <Typography variant="h5" gutterBottom>
                   Settings
                 </Typography>
-
                 <PlayerToggle
                   color="white"
                   value={values.white}
                   onChange={value => setFieldValue("white", value)}
                 />
-
                 <PlayerToggle
                   className="mt-4"
                   color="black"
                   value={values.black}
                   onChange={value => setFieldValue("black", value)}
                 />
-
                 <div className="fj-e mt-4">
                   <Button color="primary" type="submit" variant="outlined">
                     Start
